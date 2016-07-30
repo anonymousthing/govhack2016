@@ -13,7 +13,7 @@ namespace RSSFeedsTestApplication
     {
         static void Main(string[] args)
         {
-            List<TrumbaEvent> events = new CouncilEventService().GetCouncilEvents();
+            List<TrumbaEvent> events = new ActiveParksService().GetActiveParksEvents();
             foreach (var trumbaEvent in events)
             {
                 Console.WriteLine(trumbaEvent.Title);

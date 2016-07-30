@@ -37,6 +37,14 @@ namespace RSSFeeds.Services
         }
     }
 
+    public class ActiveParksService
+    {
+        public List<TrumbaEvent> GetActiveParksEvents()
+        {
+            return TrumbaService.GetEvents("http://www.trumba.com/calendars/active-parks.rss");
+        }
+    }
+
     class TrumbaService
     {
         public static List<TrumbaEvent> GetEvents(string queryUrl)
