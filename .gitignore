@@ -14,3 +14,5 @@ api/BrisbaneLocateAPI/BrisbaneLocate/bin/
 api/BrisbaneLocateAPI/BrisbaneLocate/obj/
 
 *.suo
+**/bin/
+**/obj/
