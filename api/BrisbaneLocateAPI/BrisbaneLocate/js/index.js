@@ -1,38 +1,19 @@
-var resizeShowcaseVid = function() {
-    var minWidth = $('#content-home').width();
-    var minHeight= $('#content-home').height();
-
-    var hScaled = minWidth * 9 / 16;
-    var wScaled = minHeight * 16 / 9;
-
-    var w = wScaled;
-    var h = hScaled;
-    if (wScaled < minWidth)
-        w = minWidth;
-    if (hScaled < minHeight)
-        h = minHeight;
-    
-    $('#showcase-video').width(w);
-    $('#showcase-video').height(h);
-};
-
 var initialHash = true;
 
 var loadMap = function (from, destination, success, error) {
     window.location.hash = "#map";
     calculateAndDisplayRoute(from, destination);
+
+    var goButton = $("#go-button");
+    goButton.removeClass('fa-spinner');
+    goButton.removeClass('fa-pulse');
+    goButton.addClass('fa-bicycle');
 };
 
 var onMapLoadSuccess = function(data) {
-
 };
 
 var onMapLoadError = function(data) {
-    var goButton = $("#go-button i");
-    goButton.removeClass('fa-spinner');
-    goButton.removeClass('fa-pulse');
-    goButton.addClass('fa-arrow-right');
-
     alert(data.message);
 };
 
@@ -48,17 +29,13 @@ window.onload = function() {
     
     resizeShowcaseVid();
 
-    $("#go-button i").on('click', function(e) {
-        $(this).removeClass('fa-arrow-right');
+    $("#go-button").on('click', function(e) {
+        $(this).removeClass('fa-bicycle');
         $(this).addClass('fa-spinner');
         $(this).addClass('fa-pulse');
 
         loadMap($('#from-text').val(), $('#destination-text').val(), onMapLoadSuccess, onMapLoadError);
     });
-};
-
-window.onresize = function() {
-    resizeShowcaseVid();
 };
 
 $(window).on('hashchange', function(e) {

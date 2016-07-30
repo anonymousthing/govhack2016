@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" type="text/css" href="css/style.css">
         <!-- Google hosted JQuery and font libraries -->
         <link rel="stylesheet" href="css/font-awesome.min.css">
@@ -10,6 +11,7 @@
 		<script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/map.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCW2vZnQZhKRKw3rDsVeJxYkYf4cddbGDg&callback=initMap&libraries=places" async defer></script>
+
         <title>GovHack 2016</title>
 	</head>
 
@@ -24,19 +26,23 @@
 		</div>
         <div class="content">
             <div class="content-body current" style="display: block" id="content-home">
-                <video id="showcase-video" autoplay loop>
-					<!--Insert video here-->
-                </video>
+                <div id="showcase-bg" />
                 <div id="imagedarkener"></div>
-                <div id="content-title">
-                    <h2>WHERE DO YOU WANT TO GO TODAY?</h2>
-                </div>
-                <div id="search-boxes">
-                    <input class="textbox" id="from-text" type="text" placeholder="From" />
-                    <input class="textbox" id="destination-text" type="text" placeholder="Destination" />
-                </div>
-                <div id="go-button">
-                    <i class="fa fa-arrow-right fa-3x fa-fw" aria-hidden="true"></i>
+                <div id="home-body">
+                    <div id="content-title">
+                        <h2>WHERE DO YOU WANT TO GO TODAY?</h2>
+                    </div>
+                    <div id="search-boxes">
+                        <div id="from-wrapper">
+                            <input class="textbox" id="from-text" type="text" placeholder="From" />
+                        </div>
+                        <div id="destination-wrapper">
+                            <input class="textbox" id="destination-text" type="text" placeholder="Destination" />
+                        </div>
+                    </div>
+                    <div id="go-button-wrapper">
+                        <i id="go-button" class="fa fa-bicycle fa-2x fa-fw" aria-hidden="true"></i>
+                    </div>
                 </div>
             </div>
             <div class="content-body" style="display: none" id="content-map">
