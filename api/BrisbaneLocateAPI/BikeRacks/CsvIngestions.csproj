@@ -49,6 +49,7 @@
     <Compile Include="Services\BikeRackService.cs" />
     <Compile Include="Mappings\ToiletMap.cs" />
     <Compile Include="Models\Toilet.cs" />
+    <Compile Include="Services\ToiletService.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
