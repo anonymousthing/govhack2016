@@ -18,12 +18,9 @@ var resizeShowcaseVid = function() {
 
 var initialHash = true;
 
-var loadMap = function(from, destination, success, error) {
-    var data = {
-        message: "A timeout occurred. Please wait and try again."
-    };
-
-    setTimeout(function() { error(data) }, 1000);
+var loadMap = function (from, destination, success, error) {
+    window.location.hash = "#map";
+    calculateAndDisplayRoute(from, destination);
 };
 
 var onMapLoadSuccess = function(data) {
@@ -48,7 +45,7 @@ window.onload = function() {
         initialHash = false;
         $(window).trigger('hashchange');
     }
-
+    
     resizeShowcaseVid();
 
     $("#go-button i").on('click', function(e) {
@@ -83,3 +80,4 @@ $(window).on('hashchange', function(e) {
         showMap();
     }
 });
+
