@@ -79,4 +79,7 @@ $(window).on('hashchange', function(e) {
         $(target).fadeIn(200);
         $(target).addClass('current');
     }
+    if (window.location.hash === "#map") {
+        showMap();
+    }
 });
