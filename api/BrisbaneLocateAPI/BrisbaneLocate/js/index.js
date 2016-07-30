@@ -35,6 +35,9 @@ window.onload = function () {
 
         loadMap($('#from-text').val(), $('#destination-text').val(), onMapLoadSuccess, onMapLoadError);
     });
+
+    var height = $("#content-home").height();
+    $("#content-home").height(height);
 };
 
 $(window).on('hashchange', function(e) {
