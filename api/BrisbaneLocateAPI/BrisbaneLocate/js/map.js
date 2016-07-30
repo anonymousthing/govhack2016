@@ -140,27 +140,33 @@ function displayRoute(cyclingDirections, walkingDirections) {
     var firstLeg = cyclingDirections.routes[0].legs[0];
     var secondLeg = walkingDirections.routes[0].legs[0];
 
-    if (!walkingDisplay) {
-        walkingDisplay = new google.maps.DirectionsRenderer();
-        walkingDisplay.setMap(map);
-        walkingDisplay.setOptions({
-            polylineOptions: { strokeColor: "orange", strokeWeight: 4 },
-
-            // We will draw our own markers.
-            suppressMarkers: true
-        });
-    }
-
     if (!cyclingDisplay) {
         cyclingDisplay = new google.maps.DirectionsRenderer();
         cyclingDisplay.setMap(map);
         cyclingDisplay.setOptions({
+            polylineOptions: { strokeColor: "#73B9FF", strokeWeight: 4, strokeOpacity: 0.8 },
+
             // We will draw our own markers.
             suppressMarkers: true
         });
     }
-    walkingDisplay.setDirections(walkingDirections);
+
+    if (!walkingDisplay) {
+        walkingDisplay = new google.maps.DirectionsRenderer();
+        walkingDisplay.setMap(map);
+        walkingDisplay.setOptions({
+            polylineOptions: { strokeColor: "#75FF75", strokeWeight: 4, strokeOpacity: 0.8 },
+
+            // We will draw our own markers.
+            suppressMarkers: true,
+
+            // Don't zoom in on this!
+            preserveViewport: true,
+        });
+    }
+
     cyclingDisplay.setDirections(cyclingDirections);
+    walkingDisplay.setDirections(walkingDirections);
 
     var startMarker = new google.maps.Marker({
         map: map,
