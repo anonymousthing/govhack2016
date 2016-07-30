@@ -18,5 +18,7 @@ namespace RSSFeeds.Models
         public string Requirements;
         public string AgeRestriction;
         public string Address;
+        public Decimal Latitude;
+        public Decimal Longitude;
     }
 }
