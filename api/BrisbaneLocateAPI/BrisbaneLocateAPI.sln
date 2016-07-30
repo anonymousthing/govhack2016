@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityCycle", "CityCycle\City
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityCycleTestApplication", "CityCycleTestApplication\CityCycleTestApplication.csproj", "{D959D29F-39CF-4B6E-B72F-939BD14C4D2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvIngestions", "BikeRacks\CsvIngestions.csproj", "{93068722-9832-4026-8475-A0583FA1E080}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BikeRackTestApplication", "BikeRackTestApplication\BikeRackTestApplication.csproj", "{7ACFFCE2-F287-4049-8667-4DA493F9009E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{D959D29F-39CF-4B6E-B72F-939BD14C4D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D959D29F-39CF-4B6E-B72F-939BD14C4D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D959D29F-39CF-4B6E-B72F-939BD14C4D2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93068722-9832-4026-8475-A0583FA1E080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93068722-9832-4026-8475-A0583FA1E080}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93068722-9832-4026-8475-A0583FA1E080}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93068722-9832-4026-8475-A0583FA1E080}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ACFFCE2-F287-4049-8667-4DA493F9009E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ACFFCE2-F287-4049-8667-4DA493F9009E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ACFFCE2-F287-4049-8667-4DA493F9009E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ACFFCE2-F287-4049-8667-4DA493F9009E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

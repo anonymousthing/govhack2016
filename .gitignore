@@ -1,7 +1,13 @@
 api/BrisbaneLocateAPI/packages/
 api/BrisbaneLocateAPI/CityCycle/bin/
 api/BrisbaneLocateAPI/CityCycle/obj/
+api/BrisbaneLocateAPI/BrisbaneLocateAPI/bin/
 api/BrisbaneLocateAPI/BrisbaneLocateAPI/obj/
+api/BrisbaneLocateAPI/CityCycleTestApplication/bin/
 api/BrisbaneLocateAPI/CityCycleTestApplication/obj/
 api/BrisbaneLocateAPI/.vs/
+api/BrisbaneLocateAPI/BikeRacks/bin/
+api/BrisbaneLocateAPI/BikeRacks/obj/
+api/BrisbaneLocateAPI/BikeRackTestApplication/bin/
+api/BrisbaneLocateAPI/BikeRackTestApplication/obj/
 *.suo
