@@ -33,9 +33,14 @@
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>Hello World</title>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+
+        <title>This is title</title>
     </head>
-    <body>
+
+<!--  Cordova's Default page. left for a reference
+   <body>
         <div class="app">
             <h1>Apache Cordova</h1>
             <div id="deviceready" class="blink">
@@ -45,5 +50,40 @@
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
+    </body> -->
+
+    <body>
+        <div class="top-nav">
+            <img id="nav-logo" src="media/logo.png"></img>
+            <ul class="nav-menu">
+                <li class="nav-menu-btn"><a href="#about">ABOUT</a></li>
+                <li class="nav-menu-btn"><a href="#map">MAP</a></li>
+                <li class="nav-menu-btn"><a href="#home">HOME</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <div class="content-body current" style="display: block" id="content-home">
+                <video id="showcase-video" autoplay loop>
+                    <!--Insert video here-->
+                </video>
+                <div id="imagedarkener"></div>
+                <div id="content-title">
+                    <h2>WHERE DO YOU WANT TO GO TODAY?</h2>
+                </div>
+                <div id="search-boxes">
+                    <input class="textbox" id="from-text" type="text" placeholder="From" />
+                    <input class="textbox" id="destination-text" type="text" placeholder="Destination" />
+                </div>
+                <div id="go-button">
+                    <i class="fa fa-arrow-right fa-3x fa-fw" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="content-body" style="display: none" id="content-map">
+                
+            </div>
+            <div class="content-body" style="display: none" id="content-about">
+            </div>
+        </div>
     </body>
+
 </html>
