@@ -10,4 +10,7 @@ api/BrisbaneLocateAPI/BikeRacks/bin/
 api/BrisbaneLocateAPI/BikeRacks/obj/
 api/BrisbaneLocateAPI/BikeRackTestApplication/bin/
 api/BrisbaneLocateAPI/BikeRackTestApplication/obj/
+api/BrisbaneLocateAPI/BrisbaneLocate/bin/
+api/BrisbaneLocateAPI/BrisbaneLocate/obj/
+
 *.suo
