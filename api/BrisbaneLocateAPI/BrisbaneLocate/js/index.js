@@ -17,15 +17,15 @@ var onMapLoadError = function(data) {
     alert(data.message);
 };
 
-window.onload = function() {
-    if (window.location.hash == '#home') {
-        initialHash = false;
-    } else if (window.location.hash == '') {
-        window.location.hash = '#home';
-    } else {
-        initialHash = false;
-        $(window).trigger('hashchange');
-    }
+window.onload = function () {
+    window.location.hash = '#home';
+    
+    //else if (window.location.hash == '') {
+    //    window.location.hash = '#home';
+    //} else {
+    //    initialHash = false;
+    //    $(window).trigger('hashchange');
+    //}
 
     $("#go-button-wrapper").on('click', function (e) {
         var goButton = $("#go-button");

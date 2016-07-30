@@ -1,6 +1,14 @@
+// Reference to the google map
 var map;
+
+// Reference to the directions render. So that we can clear and re-use it if start/end changes.
 var directionsDisplay;
+
+// The list bike racks retrieved from the server.
 var bikeracks;
+
+// The set of markers rendered to the map.
+var markers;
 
 // Needs to be in global scope so that Google maps can do a callback.
 // Called after google maps JS is loaded.
@@ -89,11 +97,6 @@ function calculateAndDisplayRoute(start, end) {
             }) 
 
             var directionsService = new google.maps.DirectionsService;
-            if (!directionsDisplay) {
-                directionsDisplay = new google.maps.DirectionsRenderer;
-                directionsDisplay.setMap(map);
-            }
-
             directionsService.route({
                 origin: start,
                 destination: end,
@@ -101,11 +104,46 @@ function calculateAndDisplayRoute(start, end) {
                 travelMode: 'BICYCLING'
             }, function (response, status) {
                 if (status === 'OK') {
-                    directionsDisplay.setDirections(response);
+                    displayRoute(response);
                 } else {
                     window.alert('Directions request failed due to ' + status);
                 }
             });
         }
+    });
+}
+
+function displayRoute(directions) {
+    if (!directionsDisplay) {
+        var renderOptions = {
+            // We will draw our own markers.
+            suppressMarkers: true
+        };
+        directionsDisplay = new google.maps.DirectionsRenderer(renderOptions);
+        directionsDisplay.setMap(map);
+    }
+    var route = directions.routes[0];
+    var firstLeg = route.legs[0];
+    var secondLeg = route.legs[1];
+
+    directionsDisplay.setDirections(directions);
+
+    var startMarker = new google.maps.Marker({
+        map: map,
+        position: firstLeg.start_location,
+        title: "Start",
+        label: "A"
+    });
+    var changeOver = new google.maps.Marker({
+        map: map,
+        position: secondLeg.start_location,
+        title: "Bike Rack",
+        label: "X"
+    });
+    var endMarker = new google.maps.Marker({
+        map: map,
+        position: secondLeg.end_location,
+        title: "End",
+        label: "B"
     });
 }
