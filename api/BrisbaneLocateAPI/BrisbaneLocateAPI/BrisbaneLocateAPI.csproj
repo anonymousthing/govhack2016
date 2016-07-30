@@ -77,8 +77,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http" />
@@ -118,6 +118,7 @@
     </Content>
     <Content Include="Service References\Application Insights\ConnectedService.json" />
     <Content Include="Content\CBD-bike-racks.csv" />
+    <Content Include="Content\drinkingFountains.csv" />
     <None Include="Properties\PublishProfiles\.pubxml" />
     <None Include="Properties\PublishProfiles\GovHack 2016.pubxml" />
     <None Include="Web.Debug.config">
@@ -135,12 +136,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CityCycleController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\BikeRackController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Location.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +156,10 @@
     <ProjectReference Include="..\BikeRacks\CsvIngestions.csproj">
       <Project>{93068722-9832-4026-8475-a0583fa1e080}</Project>
       <Name>CsvIngestions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CityCycle\CityCycle.csproj">
+      <Project>{1e480d75-f4f8-4eeb-a0e1-f7c159fe23c5}</Project>
+      <Name>CityCycle</Name>
     </ProjectReference>
     <ProjectReference Include="..\RSSFeeds\RSSFeeds.csproj">
       <Project>{772ce2a1-7815-42cc-b166-3dec0e6df793}</Project>
