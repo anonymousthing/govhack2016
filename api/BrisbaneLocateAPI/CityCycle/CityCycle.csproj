@@ -47,8 +47,8 @@
     <Compile Include="Interfaces\ICityCycleService.cs" />
     <Compile Include="Models\CityCycleStation.cs" />
     <Compile Include="Models\Xml\Marker.cs" />
-    <Compile Include="Services\CityCycleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CityCycleService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

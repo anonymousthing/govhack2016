@@ -29,7 +29,7 @@ namespace CityCycle.Services
                 MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(cityCycleLocationsXMLString));
                 cityCycleLocations = (CityCycle.Models.Xml.Carto)serializer.Deserialize(memStream);
             }
-                
+
             return cityCycleLocations.Markers.Marker.Select(x => new CityCycleStation() {
                 Id = UInt32.Parse(x.Number),
                 Name = x.Name,
@@ -37,7 +37,7 @@ namespace CityCycle.Services
                 FullAddress = x.FullAddress,
                 Latitude = Decimal.Parse(x.Lat),
                 Longitude = Decimal.Parse(x.Lng),
-                Open = Boolean.Parse(x.Open)
+                Open = x.Open.Equals("1") ? true : false
             }).ToList();
         }
     }
