@@ -12,7 +12,7 @@ namespace CsvIngestion.Services
 {
 	public class ToiletService
 	{
-		static public List<BikeRack> ToiletLocations { get; private set;}
+		static public List<Toilet> ToiletLocations { get; private set;}
 
 		public ToiletService(string location = "")
 		{
