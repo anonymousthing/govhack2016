@@ -136,21 +136,29 @@ function calculateAndDisplayRoute(start, end) {
 }
 
 function displayRoute(cyclingDirections, walkingDirections) {
-    var renderOptions = {
-        // We will draw our own markers.
-        suppressMarkers: true
-    };
-    if (!walkingDisplay) {
-        walkingDisplay = new google.maps.DirectionsRenderer(renderOptions);
-        walkingDisplay.setMap(map);
-    }
-    if (!cyclingDisplay) {
-        cyclingDisplay = new google.maps.DirectionsRenderer(renderOptions);
-        cyclingDisplay.setMap(map);
-    }
+    
     var firstLeg = cyclingDirections.routes[0].legs[0];
     var secondLeg = walkingDirections.routes[0].legs[0];
 
+    if (!walkingDisplay) {
+        walkingDisplay = new google.maps.DirectionsRenderer();
+        walkingDisplay.setMap(map);
+        walkingDisplay.setOptions({
+            polylineOptions: { strokeColor: "orange", strokeWeight: 4 },
+
+            // We will draw our own markers.
+            suppressMarkers: true
+        });
+    }
+
+    if (!cyclingDisplay) {
+        cyclingDisplay = new google.maps.DirectionsRenderer();
+        cyclingDisplay.setMap(map);
+        cyclingDisplay.setOptions({
+            // We will draw our own markers.
+            suppressMarkers: true
+        });
+    }
     walkingDisplay.setDirections(walkingDirections);
     cyclingDisplay.setDirections(cyclingDirections);
 
@@ -173,6 +181,8 @@ function displayRoute(cyclingDirections, walkingDirections) {
         label: "B"
     });
 
+    // Update step details
+    $("#step-details").html('');
     for (var i = 0; i < firstLeg.steps.length; i++) {
         var step = firstLeg.steps[i];
         $("#step-details").append('<div class="step">' + step.instructions + '</div>');
