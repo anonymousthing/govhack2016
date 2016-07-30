@@ -20,15 +20,6 @@ a {
     font-family: 'Merriweather', serif;
 }
 
-i.fa {
-animation: show 4s 1;
-  /* any other properties to override from FontAwesome's default .fa rule */
-}
-@keyframes show {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
 /* Nav bar */
 
 .top-nav {
@@ -98,7 +89,7 @@ animation: show 4s 1;
 #content-title {
     position: absolute;
     width: 100%;
-    top: 30%;
+    top: 40%;
     left: 50%;
     transform: translateY(-50%) translateX(-50%); 
     text-align: center;
@@ -171,7 +162,7 @@ textarea:focus, input:focus{
 
 #search-boxes {
     position: absolute;
-    top: 50%;
+    top: 60%;
     left: 50%;
     transform: translateY(-50%) translateX(-50%); 
     width: 100%;
@@ -184,10 +175,11 @@ textarea:focus, input:focus{
     margin-left: 40px;
 }
 
-.go-button {
+#go-button {
     position: absolute;
-    right: 10%;
-    top: 50%;
+    right: 5%;
+    top: 60%;
     transform: translateY(-50%) translateX(-50%);
     color: white;
+    cursor: pointer;
 }
