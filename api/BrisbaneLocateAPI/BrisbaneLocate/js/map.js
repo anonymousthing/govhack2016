@@ -98,7 +98,7 @@ function calculateAndDisplayRoute(start, end) {
                 origin: start,
                 destination: end,
                 waypoints: waypoints,
-                travelMode: 'DRIVING'
+                travelMode: 'BICYCLING'
             }, function (response, status) {
                 if (status === 'OK') {
                     directionsDisplay.setDirections(response);
