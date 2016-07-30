@@ -1,4 +1,7 @@
 api/BrisbaneLocateAPI/packages/
+api/BrisbaneLocateAPI/CityCycle/bin/
 api/BrisbaneLocateAPI/CityCycle/obj/
 api/BrisbaneLocateAPI/BrisbaneLocateAPI/obj/
 api/BrisbaneLocateAPI/CityCycleTestApplication/obj/
+api/BrisbaneLocateAPI/.vs/
+*.suo

@@ -31,13 +31,13 @@ namespace CityCycle.Services
             }
                 
             return cityCycleLocations.Markers.Marker.Select(x => new CityCycleStation() {
-                Id = x.Number,
-                Name = x.Name,
-                Address = x.Address,
-                FullAddress = x.FullAddress,
-                Latitude = x.Lat,
-                Longitude = x.Lng,
-                Open = x.Open
+                //Id = x.Number,
+                //Name = x.Name,
+                //Address = x.Address,
+                //FullAddress = x.FullAddress,
+                //Latitude = x.Lat,
+                //Longitude = x.Lng,
+                //Open = x.Open
             }).ToList();
         }
     }
