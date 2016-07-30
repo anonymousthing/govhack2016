@@ -174,9 +174,12 @@ textarea:focus, input:focus{
 }
 
 #map {
-    position: absolute;
     width: 100%;
+    height: 600px;
+}
 
-    top: 0;
-    bottom: 20%;
+#map-details {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 600px;
+    width: 100%;
 }
