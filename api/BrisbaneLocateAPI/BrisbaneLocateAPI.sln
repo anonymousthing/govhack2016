@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityCycle", "CityCycle\City
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityCycleTestApplication", "CityCycleTestApplication\CityCycleTestApplication.csproj", "{D959D29F-39CF-4B6E-B72F-939BD14C4D2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSSFeeds", "RSSFeeds\RSSFeeds.csproj", "{772CE2A1-7815-42CC-B166-3DEC0E6DF793}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSSFeedsTestApplication", "RSSFeedsTestApplication\RSSFeedsTestApplication.csproj", "{47E3AB4F-F12C-44AB-8B85-D455CA09F07D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{D959D29F-39CF-4B6E-B72F-939BD14C4D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D959D29F-39CF-4B6E-B72F-939BD14C4D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D959D29F-39CF-4B6E-B72F-939BD14C4D2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{772CE2A1-7815-42CC-B166-3DEC0E6DF793}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{772CE2A1-7815-42CC-B166-3DEC0E6DF793}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{772CE2A1-7815-42CC-B166-3DEC0E6DF793}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{772CE2A1-7815-42CC-B166-3DEC0E6DF793}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47E3AB4F-F12C-44AB-8B85-D455CA09F07D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47E3AB4F-F12C-44AB-8B85-D455CA09F07D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47E3AB4F-F12C-44AB-8B85-D455CA09F07D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47E3AB4F-F12C-44AB-8B85-D455CA09F07D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
