@@ -160,7 +160,7 @@ function displayRoute(cyclingDirections, walkingDirections, rack) {
             // We will draw our own markers.
             suppressMarkers: true,
 
-            // Don't zoom in on this!
+            // Don't zoom in on the walking section. It is usually very small.
             preserveViewport: true,
         });
     }
@@ -169,24 +169,9 @@ function displayRoute(cyclingDirections, walkingDirections, rack) {
     walkingDisplay.setDirections(walkingDirections);
 
     clearMarkers();
-    markers.push(new google.maps.Marker({
-        map: map,
-        position: firstLeg.start_location,
-        title: "Start",
-        label: "A"
-    }));    
-    markers.push(new google.maps.Marker({
-        map: map,
-        position: secondLeg.start_location,
-        title: "Bike Rack",
-        label: "P"
-    }));
-    markers.push(new google.maps.Marker({
-        map: map,
-        position: secondLeg.end_location,
-        title: "End",
-        label: "B"
-    }));
+    placeRouteMarker(firstLeg.start_location, "A", "Start", "");
+    placeRouteMarker(secondLeg.start_location, "P", "Bike Rack", "");
+    placeRouteMarker(secondLeg.end_location, "B", "End", "");
 
     // TODO: Place event markers
     placeMarker(-27.469, 153.023, {});
@@ -218,14 +203,37 @@ function displayRoute(cyclingDirections, walkingDirections, rack) {
     }
 }
 
+function placeRouteMarker(latLng, label, title, popupContent) {
+    var marker = new google.maps.Marker({
+        map: map,
+        position: latLng,
+        title: title,
+        label: label
+    });
+    var infoWindow = new google.maps.InfoWindow({
+        content: popupContent,
+    });
+    marker.addListener('click', function () {
+        infoWindow.open(map, marker);
+    });
+    markers.push(marker);
+}
+
 function placeMarker(latitude, longitude, data) {
     var location = new google.maps.LatLng({ lat: latitude, lng: longitude });
-    markers.push(new google.maps.Marker({
+    var marker = new google.maps.Marker({
         map: map,
         position: location,
         title: "Event",
         label: ""
-    }));
+    })
+    var infoWindow = new google.maps.InfoWindow({
+        content: "Event details here",
+    });
+    marker.addListener('click', function () {
+        infoWindow.open(map, marker);
+    });
+    markers.push(marker);
 }
 
 function clearMarkers() {
