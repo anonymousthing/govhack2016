@@ -12,8 +12,8 @@ namespace CityCycle.Models
         public string Name { get; set; }
         public string Address { get; set; }
         public string FullAddress { get; set; }
-		public Decimal Latitude { get; set; }
-		public Decimal Longitude { get; set; }
+        public Decimal Latitude { get; set; }
+        public Decimal Longitude { get; set; }
         public bool Open { get; set; }
         public UInt32 AvailableBikes { get; set; }
         public UInt32 Free { get; set; }
