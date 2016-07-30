@@ -2,7 +2,8 @@
 var map;
 
 // Reference to the directions render. So that we can clear and re-use it if start/end changes.
-var directionsDisplay;
+var cyclingDisplay;
+var walkingDisplay;
 
 // The list bike racks retrieved from the server.
 var bikeracks;
@@ -90,43 +91,68 @@ function calculateAndDisplayRoute(start, end) {
                 window.alert('No bike rack found near destination.');
                 return;
             }
-            var waypoints = [];
-            waypoints.push({
-                location: new google.maps.LatLng(nearestRack.Latitude, nearestRack.Longitude),
-                stopover: true
-            }) 
+            var bicycleRack = new google.maps.LatLng(nearestRack.Latitude, nearestRack.Longitude);
+
+            var responseCount = 0;
+            var cyclingRoute = null; // Start to bicycle rack
+            var walkingRoute = null; // Bicycle rack to End.
 
             var directionsService = new google.maps.DirectionsService;
             directionsService.route({
                 origin: start,
-                destination: end,
-                waypoints: waypoints,
+                destination: bicycleRack,
                 travelMode: 'BICYCLING'
             }, function (response, status) {
                 if (status === 'OK') {
-                    displayRoute(response);
+                    responseCount++;
+                    cyclingRoute = response;
+                    processDirections();
                 } else {
                     window.alert('Directions request failed due to ' + status);
                 }
             });
+
+            directionsService.route({
+                origin: bicycleRack,
+                destination: end,
+                travelMode: 'WALKING'
+            }, function (response, status) {
+                if (status === 'OK') {
+                    responseCount++;
+                    walkingRoute = response;
+                    processDirections();
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+
+            function processDirections() {
+                if (responseCount == 2) {
+                    displayRoute(cyclingRoute, walkingRoute);
+                }
+            }
         }
     });
 }
 
-function displayRoute(directions) {
-    if (!directionsDisplay) {
-        var renderOptions = {
-            // We will draw our own markers.
-            suppressMarkers: true
-        };
-        directionsDisplay = new google.maps.DirectionsRenderer(renderOptions);
-        directionsDisplay.setMap(map);
+function displayRoute(cyclingDirections, walkingDirections) {
+    var renderOptions = {
+        // We will draw our own markers.
+        suppressMarkers: true
+    };
+    if (!walkingDisplay) {
+        walkingDisplay = new google.maps.DirectionsRenderer(renderOptions);
+        walkingDisplay.setMap(map);
     }
-    var route = directions.routes[0];
-    var firstLeg = route.legs[0];
-    var secondLeg = route.legs[1];
+    if (!cyclingDisplay) {
+        cyclingDisplay = new google.maps.DirectionsRenderer(renderOptions);
+        cyclingDisplay.setMap(map);
+    }
+    var firstLeg = cyclingDirections.routes[0].legs[0];
+    var secondLeg = walkingDirections.routes[0].legs[0];
 
-    directionsDisplay.setDirections(directions);
+    walkingDisplay.setDirections(walkingDirections);
+    cyclingDisplay.setDirections(cyclingDirections);
 
     var startMarker = new google.maps.Marker({
         map: map,
