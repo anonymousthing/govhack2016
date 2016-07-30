@@ -13,10 +13,10 @@ namespace RSSFeedsTestApplication
     {
         static void Main(string[] args)
         {
-            List<FitnessEvent> events = new FitnessEventService().GetFitnessEvents();
-            foreach (var fitnessEvent in events)
+            List<TrumbaEvent> events = new CouncilEventService().GetCouncilEvents();
+            foreach (var trumbaEvent in events)
             {
-                Console.WriteLine(fitnessEvent.Title);
+                Console.WriteLine(trumbaEvent.Title);
             }
             Console.ReadLine();
         }

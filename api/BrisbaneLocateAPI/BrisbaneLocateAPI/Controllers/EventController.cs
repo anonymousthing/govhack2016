@@ -14,7 +14,7 @@ namespace BrisbaneLocateAPI.Controllers
     public class EventController : ApiController
     { 
         [HttpGet]
-        public List<FitnessEvent> Get()
+        public List<TrumbaEvent> Get()
         {
             return new FitnessEventService().GetFitnessEvents();
         }

@@ -148,7 +148,7 @@ namespace RSSFeeds.Models.XML
     }
 
     [XmlRoot(ElementName = "rss")]
-    public class FitnessEventsXML
+    public class TrumbaXML
     {
         [XmlElement(ElementName = "channel")]
         public Channel Channel { get; set; }

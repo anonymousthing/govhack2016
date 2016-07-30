@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace RSSFeeds.Models
 {
-    public class FitnessEvent
+    public class TrumbaEvent
     {
         public string Title;
+        public DateTime StartTime;
+        public DateTime EndTime;
         public string Description;
         public string Link;
         public string EventActionLink;
