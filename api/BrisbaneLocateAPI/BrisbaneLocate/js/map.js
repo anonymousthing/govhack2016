@@ -187,12 +187,26 @@ function displayRoute(cyclingDirections, walkingDirections) {
         label: "B"
     });
 
+    var latlngs = [];
+
     // Update step details
     $("#step-details").html('');
     for (var i = 0; i < firstLeg.steps.length; i++) {
         var step = firstLeg.steps[i];
+        latlngs.push({ latitude: step.start_location.lat(), longitude: step.start_location.lng() });
         $("#step-details").append('<div class="step">' + step.instructions + '</div>');
     }
+    $.ajax("/api/event", {
+        data: JSON.stringify(latlngs),
+        dataType: "json",
+        contentType: "application/json",
+        method: "POST",
+    }).done(function(data) {
+        console.log(data);
+    }).error(function (data) {
+        console.log(data);
+    });
+
     for (var i = 0; i < secondLeg.steps.length; i++) {
         var step = secondLeg.steps[i];
         $("#step-details").append('<div class="step">' + step.instructions + '</div>');
