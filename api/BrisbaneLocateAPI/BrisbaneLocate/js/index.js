@@ -26,13 +26,12 @@ window.onload = function() {
         initialHash = false;
         $(window).trigger('hashchange');
     }
-    
-    resizeShowcaseVid();
 
-    $("#go-button").on('click', function(e) {
-        $(this).removeClass('fa-bicycle');
-        $(this).addClass('fa-spinner');
-        $(this).addClass('fa-pulse');
+    $("#go-button-wrapper").on('click', function (e) {
+        var goButton = $("#go-button");
+        goButton.removeClass('fa-bicycle');
+        goButton.addClass('fa-spinner');
+        goButton.addClass('fa-pulse');
 
         loadMap($('#from-text').val(), $('#destination-text').val(), onMapLoadSuccess, onMapLoadError);
     });
