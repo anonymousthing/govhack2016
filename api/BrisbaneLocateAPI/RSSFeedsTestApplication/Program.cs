@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using RSSFeeds;
+using RSSFeeds.Services;
 using RSSFeeds.Models;
 
 namespace RSSFeedsTestApplication
@@ -13,8 +13,8 @@ namespace RSSFeedsTestApplication
     {
         static void Main(string[] args)
         {
-            FitnessEvents events = new FitnessEventService().GetFitnessEvents();
-            foreach (var fitnessEvent in events.Items)
+            List<FitnessEvent> events = new FitnessEventService().GetFitnessEvents();
+            foreach (var fitnessEvent in events)
             {
                 Console.WriteLine(fitnessEvent.Title);
             }
