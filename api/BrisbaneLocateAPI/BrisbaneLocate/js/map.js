@@ -146,4 +146,13 @@ function displayRoute(directions) {
         title: "End",
         label: "B"
     });
+
+    for (var i = 0; i < firstLeg.steps.length; i++) {
+        var step = firstLeg.steps[i];
+        $("#step-details").append('<div class="step">' + step.instructions + '</div>');
+    }
+    for (var i = 0; i < secondLeg.steps.length; i++) {
+        var step = secondLeg.steps[i];
+        $("#step-details").append('<div class="step">' + step.instructions + '</div>');
+    }
 }
