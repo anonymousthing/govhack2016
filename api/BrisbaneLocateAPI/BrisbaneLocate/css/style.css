@@ -1,0 +1,185 @@
+/* Lovingly hand-crafted and wood-smoked in my custom oven */
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+h1, h2, h3 {
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+h1 {
+    font-size: 70px;
+}
+h2 {
+    font-size: 40px;
+}
+
+a {
+    font-family: 'Merriweather', serif;
+}
+
+/* Nav bar */
+
+.top-nav {
+    position: fixed;
+    width: 100%;
+    height: 80px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0px 0 10px gray;
+    z-index: 1;
+}
+
+#nav-logo {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+}
+
+.nav-menu {
+    position: absolute;
+    top: 0;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.nav-menu-btn {
+    height: 100%;
+    width: 100px;
+    float: right;
+    text-align: center;
+}
+
+.nav-menu-btn:hover {
+    background-color: #EEEEEE;
+  -o-transition:.3s;
+  -ms-transition:.3s;
+  -moz-transition:.3s;
+  -webkit-transition:.3s;
+  transition:.3s;
+}
+
+.nav-menu-btn a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    line-height: 80px;
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Content body */
+
+.content {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#content-title {
+    position: absolute;
+    width: 100%;
+    top: 40%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%); 
+    text-align: center;
+    color: white;
+    font-weight: bold;
+}
+
+.content-body {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 30px 0 50px 0;
+}
+
+.current {
+    
+}
+
+/* Home page stuff */
+
+#content-home {
+    height: 100%;
+    overflow: hidden;
+    
+    background-color: black;
+    text-align: center;
+    padding: 0;
+}
+
+#imagedarkener {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+#disclaimer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 3px 3px;
+
+    font-size: 11px;
+    color: dimgray;
+}
+#disclaimer a {
+    font-family: 'Open Sans', sans-serif;
+}
+
+textarea:focus, input:focus{
+    outline: none;
+}
+
+.textbox {
+    border-radius: 5px;
+    line-height: 50px;
+    height: 50px;
+    width: 450px;
+
+    border: 0px solid;
+
+    font-size: 22px;
+    font-family: 'Open Sans', sans-serif;
+
+    padding: 0px 55px 0px 20px;
+}
+
+#search-boxes {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%); 
+    width: 100%;
+}
+
+#from-text {
+    margin-right: 40px;
+}
+#destination-text {
+    margin-left: 40px;
+}
+
+#go-button {
+    position: absolute;
+    right: 5%;
+    top: 60%;
+    transform: translateY(-50%) translateX(-50%);
+    color: white;
+    cursor: pointer;
+}
