@@ -117,6 +117,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Service References\Application Insights\ConnectedService.json" />
+    <Content Include="Content\CBD-bike-racks.csv" />
     <None Include="Properties\PublishProfiles\.pubxml" />
     <None Include="Properties\PublishProfiles\GovHack 2016.pubxml" />
     <None Include="Web.Debug.config">
@@ -134,6 +135,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\EventController.cs" />
+    <Compile Include="Controllers\BikeRackController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -145,6 +148,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BikeRacks\CsvIngestions.csproj">
+      <Project>{93068722-9832-4026-8475-a0583fa1e080}</Project>
+      <Name>CsvIngestions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RSSFeeds\RSSFeeds.csproj">
+      <Project>{772ce2a1-7815-42cc-b166-3dec0e6df793}</Project>
+      <Name>RSSFeeds</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

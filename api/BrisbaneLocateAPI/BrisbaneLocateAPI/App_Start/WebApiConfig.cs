@@ -13,7 +13,7 @@ namespace BrisbaneLocateAPI
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}"
+                routeTemplate: "{controller}"
             );
         }
     }

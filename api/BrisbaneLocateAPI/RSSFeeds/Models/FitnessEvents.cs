@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace RSSFeeds.Models
 {
-    public class FitnessEvents
-    {
-        public List<FitnessItem> Items;
-    }
-
-    public class FitnessItem
+    public class FitnessEvent
     {
         public string Title;
         public string Description;

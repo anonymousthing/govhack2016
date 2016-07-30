@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace BrisbaneLocateAPI.Controllers
 {
-    [RoutePrefix("api/index")]
+    [RoutePrefix("index")]
     public class IndexController : ApiController
     {
         public IndexController()
