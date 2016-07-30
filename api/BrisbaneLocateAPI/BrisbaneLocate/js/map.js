@@ -9,7 +9,7 @@ var walkingDisplay;
 var bikeracks;
 
 // The set of markers rendered to the map.
-var markers;
+var markers = [];
 
 // Needs to be in global scope so that Google maps can do a callback.
 // Called after google maps JS is loaded.
@@ -128,14 +128,14 @@ function calculateAndDisplayRoute(start, end) {
 
             function processDirections() {
                 if (responseCount == 2) {
-                    displayRoute(cyclingRoute, walkingRoute);
+                    displayRoute(cyclingRoute, walkingRoute, nearestRack);
                 }
             }
         }
     });
 }
 
-function displayRoute(cyclingDirections, walkingDirections) {
+function displayRoute(cyclingDirections, walkingDirections, rack) {
     
     var firstLeg = cyclingDirections.routes[0].legs[0];
     var secondLeg = walkingDirections.routes[0].legs[0];
@@ -168,24 +168,28 @@ function displayRoute(cyclingDirections, walkingDirections) {
     cyclingDisplay.setDirections(cyclingDirections);
     walkingDisplay.setDirections(walkingDirections);
 
-    var startMarker = new google.maps.Marker({
+    clearMarkers();
+    markers.push(new google.maps.Marker({
         map: map,
         position: firstLeg.start_location,
         title: "Start",
         label: "A"
-    });
-    var changeOver = new google.maps.Marker({
+    }));    
+    markers.push(new google.maps.Marker({
         map: map,
         position: secondLeg.start_location,
         title: "Bike Rack",
-        label: "X"
-    });
-    var endMarker = new google.maps.Marker({
+        label: "P"
+    }));
+    markers.push(new google.maps.Marker({
         map: map,
         position: secondLeg.end_location,
         title: "End",
         label: "B"
-    });
+    }));
+
+    // TODO: Place event markers
+    placeMarker(-27.469, 153.023, {});
 
     var latlngs = [];
 
@@ -207,8 +211,26 @@ function displayRoute(cyclingDirections, walkingDirections) {
         console.log(data);
     });
 
+    $("#step-details").append('<div class="step">Park at the bicycle racks on <b>' + rack.Address + '</b></div>');
     for (var i = 0; i < secondLeg.steps.length; i++) {
         var step = secondLeg.steps[i];
         $("#step-details").append('<div class="step">' + step.instructions + '</div>');
     }
+}
+
+function placeMarker(latitude, longitude, data) {
+    var location = new google.maps.LatLng({ lat: latitude, lng: longitude });
+    markers.push(new google.maps.Marker({
+        map: map,
+        position: location,
+        title: "Event",
+        label: ""
+    }));
+}
+
+function clearMarkers() {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+    markers = [];
 }
