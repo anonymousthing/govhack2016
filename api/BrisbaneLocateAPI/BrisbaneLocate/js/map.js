@@ -1,4 +1,5 @@
 var map;
+var directionsDisplay;
 var bikeracks;
 
 // Needs to be in global scope so that Google maps can do a callback.
@@ -6,7 +7,7 @@ var bikeracks;
 function initMap() {
     // Create a map object and specify the DOM element for display.
     map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: -34.397, lng: 150.644},
+        center: { lat: -27.469, lng: 153.023 },
         zoom: 8
     });
 
@@ -16,7 +17,20 @@ function initMap() {
 }
 
 function setupPlaceAutocomplete(textbox) {
-    var autocomplete = new google.maps.places.Autocomplete(textbox);
+    var brisbane = {
+        lat: -27.469, lng: 153.023
+    };
+    var circle = new google.maps.Circle({
+        center: brisbane,
+        radius: 2000 // 4km
+    });
+
+    // Bounds around Brisbane, to make autocomplete suggestions more helpful.
+    var autocompleteOptions = {
+        bounds: circle.getBounds(),
+        componentRestrictions: { country: "au" }
+    };
+    var autocomplete = new google.maps.places.Autocomplete(textbox, autocompleteOptions);
     autocomplete.bindTo('bounds', map);
 }
 
@@ -75,8 +89,10 @@ function calculateAndDisplayRoute(start, end) {
             }) 
 
             var directionsService = new google.maps.DirectionsService;
-            var directionsDisplay = new google.maps.DirectionsRenderer;
-            directionsDisplay.setMap(map);
+            if (!directionsDisplay) {
+                directionsDisplay = new google.maps.DirectionsRenderer;
+                directionsDisplay.setMap(map);
+            }
 
             directionsService.route({
                 origin: start,
@@ -92,6 +108,4 @@ function calculateAndDisplayRoute(start, end) {
             });
         }
     });
-
-
 }
