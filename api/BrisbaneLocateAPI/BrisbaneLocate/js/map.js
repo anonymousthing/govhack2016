@@ -47,6 +47,9 @@ function initMap() {
         zoom: 8
     });
 
+    var bikeLayer = new google.maps.BicyclingLayer();
+    bikeLayer.setMap(map);
+
     // Set-up place autocomplete
     setupPlaceAutocomplete($("#from-text")[0]);
     setupPlaceAutocomplete($("#destination-text")[0]);
