@@ -117,7 +117,7 @@ namespace RSSFeeds.Services
 
             foreach (var tEvent in events)
             {
-                var geocodedLocationJsonString = new WebClient().DownloadString(string.Format("https://maps.googleapis.com/maps/api/geocode/json?address={0}, Australia&key=AIzaSyAYl_yRDElC-kE7WPhhml9nU1b2HrDqT3A", tEvent.Address));
+                var geocodedLocationJsonString = new WebClient().DownloadString(string.Format("https://maps.googleapis.com/maps/api/geocode/json?address={0}, Australia&key=AIzaSyBpNUYHooprLMjukZc2O4n-VBtwUB_X6js", tEvent.Address));
                 Geocode geocodedLocation = JsonConvert.DeserializeObject<Geocode>(geocodedLocationJsonString);
 
                 if (geocodedLocation.results.Count > 0)
