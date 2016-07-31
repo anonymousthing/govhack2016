@@ -13,10 +13,16 @@ var infoWindow;
 
 // The list bike racks retrieved from the server.
 var bikeracks;
+var citycycles;
 
 // The user-specified start and end search strings. 
 var startLocation;
 var endLocation;
+var useCityCycle;
+
+// The geocoded start and end locations.
+var startLatLng;
+var endLatLng;
 
 // The drop-off racks available.
 var availableDropOffPoints;
@@ -39,6 +45,18 @@ function initMap() {
 }
 
 function setupPlaceAutocomplete(textbox) {
+    // Bounds around Brisbane, to make autocomplete suggestions more helpful.
+    var autocompleteOptions = {
+        bounds: getBiasingBounds(),
+        componentRestrictions: getComponentRestrictions()
+    };
+    var autocomplete = new google.maps.places.Autocomplete(textbox, autocompleteOptions);
+    autocomplete.bindTo('bounds', map);
+}
+
+// The bounds that google should bias results towards. The Brisbane CDB. To be passed
+// whenever we are autocompleting, searching, etc.
+function getBiasingBounds() {
     var brisbane = {
         lat: -27.469, lng: 153.023
     };
@@ -46,19 +64,20 @@ function setupPlaceAutocomplete(textbox) {
         center: brisbane,
         radius: 2000 // 4km
     });
+    return circle.getBounds();
+}
 
-    // Bounds around Brisbane, to make autocomplete suggestions more helpful.
-    var autocompleteOptions = {
-        bounds: circle.getBounds(),
-        componentRestrictions: { country: "au" }
-    };
-    var autocomplete = new google.maps.places.Autocomplete(textbox, autocompleteOptions);
-    autocomplete.bindTo('bounds', map);
+function getComponentRestrictions() {
+    // Restricts results to Australia
+    return { country: "au" };
 }
 
 $(document).ready(function () {
     $.ajax("/api/bikerack").done(function (data) {
         bikeracks = data;
+    });
+    $.ajax("/api/citycycle").done(function (data) {
+        citycycles = data;
     });
 });
 
@@ -69,58 +88,90 @@ function showMap() {
     }
 }
 
-function getNearbyBikeRacks(endLatLng) {
+function getNearbyBikeRacks(racks, walkToLatLng, cycleFromLatLng) {
     // Delta measures distance between endpoint and bike rack in degrees lat/lng.
     var candidateRacks = [];
 
-    for (var i = 0; i < bikeracks.length; i++) {
+    for (var i = 0; i < racks.length; i++) {
         // Apply pythag to calculate delta for each bike rack in degrees lat/lng.
-        var bikerack = bikeracks[i];
-        var deltaLat = Math.abs(bikerack.Latitude - endLatLng.lat());
-        var deltaLng = Math.abs(bikerack.Longitude - endLatLng.lng());
-        bikerack.delta = Math.sqrt(deltaLat * deltaLat + deltaLng * deltaLng);
+        var bikerack = racks[i];
+
+        // Score bikerack by total 'as-the-bird-flies' distance going from start, through the rack
+        // and to the destination. This should approximate total distance by road.
+        // The distance to walk has thrice the cost of cycling.
+        bikerack.score = calculateDelta(bikerack, walkToLatLng) * 3.0 + calculateDelta(bikerack, cycleFromLatLng);
         
         // Less than one degree lat/lng, which is quite a distance.
-        if (bikerack.delta < 1) {
+        if (bikerack.score < 1) {
             candidateRacks.push(bikerack);
         }
     }
 
-    // Now sort by the delta
+    // Now sort by the score
     candidateRacks.sort(function (a, b) {
-        return a.delta - b.delta;
+        return a.score - b.score;
     });
 
     // Return three with lowest deltas.
     return candidateRacks.slice(0, 3);
 }
 
+function calculateDelta(rack, latLng) {
+    // Apply pythag
+    var deltaLat = Math.abs(rack.Latitude - latLng.lat());
+    var deltaLng = Math.abs(rack.Longitude - latLng.lng());
+    return Math.sqrt(deltaLat * deltaLat + deltaLng * deltaLng);
+}
+
 // Called whenever searches for a route from start -> end from the home screen.
 function beginPlan(start, end) {
     startLocation = start;
     endLocation = end;
-
+    useCityCycle = false;
+    
+    // Geocode both the start and end locations, with bias towards Brisbane CBD.
+    var pendingResponses = 2;
     var geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ "address": end }, function (results, status) {
+    geocoder.geocode({
+        address: end,
+        componentRestrictions: getComponentRestrictions()
+    }, function (results, status) {
         if (status == 'OK') {
-            var endLatLng = results[0].geometry.location;
-
-            // Gets the nearest bike rack to the endpoint.
-            availableDropOffPoints = getNearbyBikeRacks(endLatLng);
-            
-            // Bail.
-            if (!availableDropOffPoints || availableDropOffPoints.length == 0 || !availableDropOffPoints[0].delta) {
-                window.alert('No bike rack found near destination.');
-                return;
-            }
-
-            // When first searching, default to the nearest rack.
-            selectedDropOffPoint = availableDropOffPoints[0];
-
-            // When first searching, default to the nearest rack.
-            calculateAndDisplayRoute();
+            endLatLng = results[0].geometry.location;
+            pendingResponses--;
+            processGeocode();
         }
     });
+
+    geocoder.geocode({
+        address: start,
+        componentRestrictions: getComponentRestrictions()
+    }, function (results, status) {
+        if (status == 'OK') {
+            startLatLng = results[0].geometry.location;
+            pendingResponses--;
+            processGeocode();
+        }
+    });
+
+    function processGeocode() {
+        if (pendingResponses > 0) return;
+
+        // Gets the nearest bike rack to the endpoint.
+        availableDropOffPoints = getNearbyBikeRacks(bikeracks, endLatLng, startLatLng);
+
+        // Bail.
+        if (!availableDropOffPoints || availableDropOffPoints.length == 0 || !availableDropOffPoints[0].score) {
+            window.alert('No bike rack found near destination.');
+            return;
+        }
+
+        // When first searching, default to the nearest rack.
+        selectedDropOffPoint = availableDropOffPoints[0];
+
+        // When first searching, default to the nearest rack.
+        calculateAndDisplayRoute();
+    }
 }
 
 // Called when the user changes their drop-off point manually
