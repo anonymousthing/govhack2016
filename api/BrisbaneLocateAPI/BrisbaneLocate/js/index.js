@@ -2,7 +2,7 @@ var initialHash = true;
 
 var loadMap = function (from, destination, success, error) {
     window.location.hash = "#map";
-    calculateAndDisplayRoute(from, destination);
+    beginPlan(from, destination);
 
     var goButton = $("#go-button");
     goButton.removeClass('fa-spinner');
