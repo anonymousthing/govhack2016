@@ -21,6 +21,9 @@ var startLocation;
 var endLocation;
 var useCityCycle;
 
+// Wether the map has been sized to the route yet.
+var mapSized;
+
 // The geocoded start and end locations.
 var startLatLng;
 var endLatLng;
@@ -133,6 +136,7 @@ function beginPlan(start, end, cityCycle) {
     startLocation = start;
     endLocation = end;
     useCityCycle = cityCycle;
+    mapSized = false;
     
     // Geocode both the start and end locations, with bias towards Brisbane CBD.
     var pendingResponses = 2;
@@ -319,11 +323,14 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
 
     placeRouteMarker(walkingEndLeg.end_location, "B", "End", '<h3>End</h3>' + walkingEndLeg.end_address);
 
-    var displayBounds = new google.maps.LatLngBounds();
-    if (useCityCycle) displayBounds = displayBounds.union(walkingStartDirections.routes[0].bounds);
-    displayBounds = displayBounds.union(cyclingDirections.routes[0].bounds);
-    displayBounds = displayBounds.union(walkingEndDirections.routes[0].bounds);
-    map.fitBounds(displayBounds);
+    if (!mapSized) {
+        var displayBounds = new google.maps.LatLngBounds();
+        if (useCityCycle) displayBounds = displayBounds.union(walkingStartDirections.routes[0].bounds);
+        displayBounds = displayBounds.union(cyclingDirections.routes[0].bounds);
+        displayBounds = displayBounds.union(walkingEndDirections.routes[0].bounds);
+        map.fitBounds(displayBounds);
+        mapSized = true;
+    }
 
     // TODO: Place event markers
     placeMarker(-27.469, 153.023, {});
