@@ -410,6 +410,9 @@ function displayRouteLine(walkingStartDirections, cyclingDirections, walkingEndD
             // We will draw our own markers.
             suppressMarkers: true,
 
+            // Don't mess with the bicycling layer.
+            suppressBicyclingLayer: true,
+
             // Don't zoom in on the walking section. It is usually very small.
             preserveViewport: true
         });
@@ -424,6 +427,9 @@ function displayRouteLine(walkingStartDirections, cyclingDirections, walkingEndD
             // We will draw our own markers.
             suppressMarkers: true,
 
+            // Don't mess with the bicycling layer.
+            suppressBicyclingLayer: true,
+
             // Don't zoom in on this section. We do manual zooming.
             preserveViewport: true
         });
@@ -436,6 +442,9 @@ function displayRouteLine(walkingStartDirections, cyclingDirections, walkingEndD
 
             // We will draw our own markers.
             suppressMarkers: true,
+
+            // Don't mess with the bicycling layer.
+            suppressBicyclingLayer: true,
 
             // Don't zoom in on the walking section. It is usually very small.
             preserveViewport: true
