@@ -29,11 +29,8 @@ namespace BrisbaneLocateAPI.Controllers
             events.AddRange(new KidsEventService().GetEvents());
             events.AddRange(new CouncilEventService().GetEvents());
             events.AddRange(new ActiveParksService().GetEvents());
-            events.AddRange(new FitnessEventService().GetEvents());
 
             events = events.Distinct().ToList();
-
-            events = TrumbaService.ComputeGeocodes(events);
 
             foreach (var location in locations)
             {
