@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Media\bg.png" />
+    <Content Include="Media\rack-marker.png" />
     <Content Include="Media\rack.png" />
     <Content Include="Media\sharp-left.png" />
     <Content Include="Media\sharp-right.png" />
