@@ -12,21 +12,20 @@ namespace CsvIngestion.Services
 {
     public class DrinkingFountainService
     {
-        static public List<BikeRack> BikeRacks { get; private set;}
+        static public List<DrinkingFountain> Fountains { get; private set;}
 
         public DrinkingFountainService(string location = "")
         {
-            if (BikeRacks == null)
+            if (Fountains == null)
             {
-
                 if (location.Equals(""))
                 {
                     location = "/Static/drinkingFountain.csv";
                 }
 
                 var BikeRackLocationsCSV = new CsvReader(File.OpenText(location));
-                BikeRackLocationsCSV.Configuration.RegisterClassMap<BikeRackMap>();
-                BikeRacks = BikeRackLocationsCSV.GetRecords<BikeRack>().ToList();
+                BikeRackLocationsCSV.Configuration.RegisterClassMap<DrinkingFountainMap>();
+                Fountains = BikeRackLocationsCSV.GetRecords<DrinkingFountain>().ToList();
             }
         }
         

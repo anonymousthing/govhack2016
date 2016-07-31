@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\FountainController.cs" />
     <Compile Include="Controllers\CityCycleController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\BikeRackController.cs" />
