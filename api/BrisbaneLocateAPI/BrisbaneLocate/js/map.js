@@ -8,6 +8,7 @@ var walkingEndDisplay;
 
 // The set of markers rendered to the map.
 var markers = [];
+var fountainMarkers = [];
 
 // The popup window that may be displayed on the map.
 var infoWindow;
@@ -16,9 +17,10 @@ var infoWindow;
 var startAutocomplete;
 var endAutocomplete;
 
-// The list bike racks retrieved from the server.
-var bikeracks;
-var citycycles;
+// The list bike racks and other entities retrieved from the server.
+var bikeracks = [];
+var citycycles = [];
+var fountains = [];
 
 // The user-specified start and end search strings. 
 var startLocation;
@@ -53,6 +55,15 @@ function initMap() {
     // Set-up place autocomplete
     startAutocomplete = setupPlaceAutocomplete($("#from-text")[0]);
     endAutocomplete = setupPlaceAutocomplete($("#destination-text")[0]);
+
+    var wereMarkersVisible = areDrinkMarkersVisible();
+    map.addListener('zoom_changed', function () {
+        if (wereMarkersVisible === areDrinkMarkersVisible()) return;
+        wereMarkersVisible = areDrinkMarkersVisible();
+        for (var i = 0; i < fountainMarkers.length; i++) {
+            fountainMarkers[i].setVisible(wereMarkersVisible);
+        }
+    });
 }
 
 function setupPlaceAutocomplete(textbox) {
@@ -90,6 +101,9 @@ $(document).ready(function () {
     });
     $.ajax("/api/citycycle").done(function (data) {
         citycycles = data;
+    });
+    $.ajax("/api/fountain").done(function (data) {
+        fountains = data;
     });
 });
 
@@ -366,6 +380,11 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
         console.log(data);
     });
 
+    for (var i = 0; i < fountains.length; i++) {
+        var fountain = fountains[i];
+        placeDrinkMarker(fountain.Latitude, fountain.Longitude);
+    }
+
     var returnDescription = (useCityCycle) ? 'Return your CityCycle to ' : 'Park at the bicycle racks on ';
     $("#step-details").append('<div class="step"><div class="maneuver rack"></div><div class="step-description">' + returnDescription + '<b>' + selectedDropOffPoint.Address + '</b></div></div>');
     displaySteps(walkingEndLeg);
@@ -467,6 +486,27 @@ function placeRackMarker(latLng, title, popupContent) {
     markers.push(marker);
 }
 
+function areDrinkMarkersVisible() {
+    return map.getZoom() > 15;
+}
+
+function placeDrinkMarker(latitude, longitude) {
+    var location = new google.maps.LatLng({ lat: latitude, lng: longitude });
+    var marker = new google.maps.Marker({
+        map: map,
+        position: location,
+        visible: areDrinkMarkersVisible(),
+
+        // Tooltip
+        title: "Drinking Fountain",
+        icon: "Media/drink-marker.png"
+    });
+    marker.addListener('click', function () {
+        showInfoWindow(map, marker, "<h3>Drinking fountain</h3>");
+    });
+    fountainMarkers.push(marker);
+}
+
 /*
 data {
     title: '',
@@ -496,8 +536,12 @@ function showInfoWindow(map, marker, content) {
 }
 
 function clearMarkers() {
+    for (var i = 0; i < fountainMarkers.length; i++) {
+        fountainMarkers[i].setMap(null);
+    }
     for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
     }
     markers = [];
+    fountainMarkers = [];
 }
