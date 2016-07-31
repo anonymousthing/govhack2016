@@ -141,11 +141,12 @@ function beginPlan(start, end, cityCycle) {
     useCityCycle = cityCycle;
     mapSized = false;
     
+    // TODO: Change to Place search request.
     // Geocode both the start and end locations, with bias towards Brisbane CBD.
     var pendingResponses = 2;
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({
-        address: end,
+        address: end
     }, function (results, status) {
         if (status == 'OK') {
             endLatLng = results[0].geometry.location;
@@ -155,7 +156,7 @@ function beginPlan(start, end, cityCycle) {
     });
 
     geocoder.geocode({
-        address: start,
+        address: start
     }, function (results, status) {
         if (status == 'OK') {
             startLatLng = results[0].geometry.location;
@@ -303,9 +304,9 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
         var location = new google.maps.LatLng({ lat: dropOffPoint.Latitude, lng: dropOffPoint.Longitude });
         
         if (dropOffPoint === selectedDropOffPoint) {
-            placeRouteMarker(location, "P", facilityName, '<h3>' + dropOffTitle + '</h3>' + dropOffPoint.Address);
+            placeRackMarker(location, facilityName, '<h3>' + dropOffTitle + '</h3>' + dropOffPoint.Address);
         } else {
-            placeRouteMarker(location, " ", facilityName, '<h3>Alternative ' + facilityName + '</h3>' + dropOffPoint.Address
+            placeRackMarker(location, facilityName, '<h3>Alternative ' + facilityName + '</h3>' + dropOffPoint.Address
                 + '<div><a href="javascript:void(0);" onclick="changeDropOffPoint(' + i + ');">Use this ' + facilityName + '</a></div>');
         }
     }
@@ -316,9 +317,9 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
             var location = new google.maps.LatLng({ lat: pickUpPoint.Latitude, lng: pickUpPoint.Longitude });
 
             if (pickUpPoint === selectedPickUpPoint) {
-                placeRouteMarker(location, "P", facilityName, '<h3>Pick-up your CityCycle here</h3>' + pickUpPoint.Address);
+                placeRackMarker(location, facilityName, '<h3>Pick-up your CityCycle here</h3>' + pickUpPoint.Address);
             } else {
-                placeRouteMarker(location, " ", facilityName, '<h3>Alternative ' + facilityName + '</h3>' + pickUpPoint.Address
+                placeRackMarker(location, facilityName, '<h3>Alternative ' + facilityName + '</h3>' + pickUpPoint.Address
                     + '<div><a href="javascript:void(0);" onclick="changePickUpPoint(' + i + ');">Use this ' + facilityName + '</a></div>');
             }
         }
@@ -346,7 +347,7 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
     $("#step-details").html('');
     if (useCityCycle) {
         displaySteps(walkingStartLeg);
-        $("#step-details").append('<div class="step"><div class="maneuver rack"></div><div class="step-description">Pick-up your CityCycle from <b>' + selectedDropOffPoint.Address + '</b></div></div>');
+        $("#step-details").append('<div class="step"><div class="maneuver rack"></div><div class="step-description">Pick-up your CityCycle from <b>' + selectedPickUpPoint.Address + '</b></div></div>');
     }
 
     var latlngs = displaySteps(cycleLeg);
@@ -364,7 +365,8 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
         console.log(data);
     });
 
-    $("#step-details").append('<div class="step"><div class="maneuver rack"></div><div class="step-description">Park at the ' + facilityName + ' on <b>' + selectedDropOffPoint.Address + '</b></div></div>');
+    var returnDescription = (useCityCycle) ? 'Return your CityCycle to ' : 'Park at the bicycle racks on ';
+    $("#step-details").append('<div class="step"><div class="maneuver rack"></div><div class="step-description">' + returnDescription + '<b>' + selectedDropOffPoint.Address + '</b></div></div>');
     displaySteps(walkingEndLeg);
 }
 
@@ -442,6 +444,21 @@ function placeRouteMarker(latLng, label, title, popupContent) {
         // Tooltip
         title: title,
         label: label
+    });
+    marker.addListener('click', function () {
+        showInfoWindow(map, marker, popupContent);
+    });
+    markers.push(marker);
+}
+
+function placeRackMarker(latLng, title, popupContent) {
+    var marker = new google.maps.Marker({
+        map: map,
+        position: latLng,
+
+        // Tooltip
+        title: title,
+        icon: "Media/rack-marker.png"
     });
     marker.addListener('click', function () {
         showInfoWindow(map, marker, popupContent);
