@@ -18,6 +18,12 @@ var onMapLoadError = function(data) {
     alert(data.message);
 };
 
+var resizeElements = function () {
+    var bottom = $("#content-home").offset().top + $("#content-home").outerHeight(true);
+    $("#bg-image").height(Math.max(window.innerHeight, bottom));
+    $("#map").height(window.innerHeight * 0.7);
+};
+
 window.onload = function () {
     window.location.hash = '#home';
     
@@ -37,10 +43,12 @@ window.onload = function () {
         loadMap($('#from-text').val(), $('#destination-text').val(), onMapLoadSuccess, onMapLoadError);
     });
 
-    var bottom = $("#content-home").offset().top + $("#content-home").outerHeight(true);
-    $("#bg-image").height(Math.max(window.innerHeight, bottom));
-    $("#map").height(window.innerHeight * 0.7);
+    resizeElements();
 };
+
+$(window).on('resize', function (e) {
+    resizeElements();
+});
 
 $(window).on('hashchange', function(e) {
     e.preventDefault();
