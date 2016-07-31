@@ -2,8 +2,9 @@
 var map;
 
 // Reference to the directions render. So that we can clear and re-use it if start/end changes.
+var walkingStartDisplay;
 var cyclingDisplay;
-var walkingDisplay;
+var walkingEndDisplay;
 
 // The set of markers rendered to the map.
 var markers = [];
@@ -27,8 +28,12 @@ var endLatLng;
 // The drop-off racks available.
 var availableDropOffPoints;
 
+// The pick-up racks available (citycycle only).
+var availablePickUpPoints;
+
 // The bicycle rack the user has decided to route through.
 var selectedDropOffPoint;
+var selectedPickUpPoint;
 
 // Needs to be in global scope so that Google maps can do a callback.
 // Called after google maps JS is loaded.
@@ -102,7 +107,7 @@ function getNearbyBikeRacks(racks, walkToLatLng, cycleFromLatLng) {
         bikerack.score = calculateDelta(bikerack, walkToLatLng) * 3.0 + calculateDelta(bikerack, cycleFromLatLng);
         
         // Less than one degree lat/lng, which is quite a distance.
-        if (bikerack.score < 1) {
+        if (bikerack.score < 100) {
             candidateRacks.push(bikerack);
         }
     }
@@ -157,17 +162,34 @@ function beginPlan(start, end) {
     function processGeocode() {
         if (pendingResponses > 0) return;
 
-        // Gets the nearest bike rack to the endpoint.
-        availableDropOffPoints = getNearbyBikeRacks(bikeracks, endLatLng, startLatLng);
+        if (useCityCycle) {
+            availablePickUpPoints = getNearbyBikeRacks(citycycles, startLatLng, endLatLng);
+            availableDropOffPoints = getNearbyBikeRacks(citycycles, endLatLng, startLatLng);
+        } else {
+            // Gets the nearest bike rack to the endpoint.
+            availablePickUpPoints = null;
+            availableDropOffPoints = getNearbyBikeRacks(bikeracks, endLatLng, startLatLng);
+        }
 
         // Bail.
         if (!availableDropOffPoints || availableDropOffPoints.length == 0 || !availableDropOffPoints[0].score) {
-            window.alert('No bike rack found near destination.');
+            window.alert('No suitable bike racks/CityCycles could be find. Try another origin or destination in Brisbane.');
+            return;
+        }
+        if ((useCityCycle) && (!availablePickUpPoints || availablePickUpPoints.length == 0 || 
+            !availablePickUpPoints[0].score)) {
+            window.alert('No suitable CityCycles could be find. Try another origin or destination in Brisbane.');
             return;
         }
 
-        // When first searching, default to the nearest rack.
+        // When first searching, default to the nearest rack/CityCycle.
         selectedDropOffPoint = availableDropOffPoints[0];
+
+        if (useCityCycle) {
+            selectedPickUpPoint = availablePickUpPoints[0];
+        } else {
+            selectedPickUpPoint = null;
+        }
 
         // When first searching, default to the nearest rack.
         calculateAndDisplayRoute();
@@ -183,20 +205,42 @@ function changeDropOffPoint(index) {
 }
 
 function calculateAndDisplayRoute() {
-    var bicycleRack = new google.maps.LatLng(selectedDropOffPoint.Latitude, selectedDropOffPoint.Longitude);
+    var dropOffRack = new google.maps.LatLng(selectedDropOffPoint.Latitude, selectedDropOffPoint.Longitude);
+    var pickUpRack = startLocation;
+    if (useCityCycle) {
+        pickUpRack = new google.maps.LatLng(selectedPickUpPoint.Latitude, selectedPickUpPoint.Longitude);
+    }
 
-    var responseCount = 0;
-    var cyclingRoute = null; // Start to bicycle rack
+    var pendingResponses = (useCityCycle) ? 3 : 2;
+    var initialWalkingRoute = null; // Start to pick-p
+    var cyclingRoute = null; // Pick-up to drop-off
     var walkingRoute = null; // Bicycle rack to End.
 
     var directionsService = new google.maps.DirectionsService;
+
+    if (useCityCycle) {
+        directionsService.route({
+            origin: startLocation,
+            destination: pickUpRack,
+            travelMode: 'WALKING'
+        }, function (response, status) {
+            if (status === 'OK') {
+                pendingResponses--;
+                initialWalkingRoute = response;
+                processDirections();
+            } else {
+                window.alert('Directions request failed due to ' + status);
+            }
+        });
+    }
+
     directionsService.route({
-        origin: startLocation,
-        destination: bicycleRack,
+        origin: pickUpRack,
+        destination: dropOffRack,
         travelMode: 'BICYCLING'
     }, function (response, status) {
         if (status === 'OK') {
-            responseCount++;
+            pendingResponses--;
             cyclingRoute = response;
             processDirections();
         } else {
@@ -205,12 +249,12 @@ function calculateAndDisplayRoute() {
     });
 
     directionsService.route({
-        origin: bicycleRack,
+        origin: dropOffRack,
         destination: endLocation,
         travelMode: 'WALKING'
     }, function (response, status) {
         if (status === 'OK') {
-            responseCount++;
+            pendingResponses--;
             walkingRoute = response;
             processDirections();
         } else {
@@ -219,18 +263,17 @@ function calculateAndDisplayRoute() {
     });
 
     function processDirections() {
-        if (responseCount == 2) {
-            displayRoute(cyclingRoute, walkingRoute);
+        if (pendingResponses === 0) {
+            displayRoute(initialWalkingRoute, cyclingRoute, walkingRoute);
         }
     }
 }
 
-function displayRoute(cyclingDirections, walkingDirections) {
-
-    displayRouteLine(cyclingDirections, walkingDirections);
+function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirections) {
+    displayRouteLine(walkingStartDirections, cyclingDirections, walkingEndDirections);
 
     var firstLeg = cyclingDirections.routes[0].legs[0];
-    var secondLeg = walkingDirections.routes[0].legs[0];
+    var secondLeg = walkingEndDirections.routes[0].legs[0];
 
     // Display route markers
     clearMarkers();
@@ -252,7 +295,7 @@ function displayRoute(cyclingDirections, walkingDirections) {
 
     var cyclingBounds = cyclingDirections.routes[0].bounds;
     var displayBounds = new google.maps.LatLngBounds(cyclingBounds.getSouthWest(), cyclingBounds.getNorthEast());
-    displayBounds.union(walkingDirections.routes[0].bounds);
+    displayBounds.union(walkingEndDirections.routes[0].bounds);
     map.fitBounds(displayBounds);
 
     // TODO: Place event markers
@@ -285,7 +328,19 @@ function displayRoute(cyclingDirections, walkingDirections) {
     }
 }
 
-function displayRouteLine(cyclingDirections, walkingDirections) {
+function displayRouteLine(walkingStartDirections, cyclingDirections, walkingEndDirections) {
+    if (!walkingStartDisplay) {
+        walkingStartDisplay = new google.maps.DirectionsRenderer();
+        walkingStartDisplay.setOptions({
+            polylineOptions: { strokeColor: "#75FF75", strokeWeight: 4, strokeOpacity: 0.8 },
+
+            // We will draw our own markers.
+            suppressMarkers: true,
+
+            // Don't zoom in on the walking section. It is usually very small.
+            preserveViewport: true
+        });
+    }
 
     if (!cyclingDisplay) {
         cyclingDisplay = new google.maps.DirectionsRenderer();
@@ -301,10 +356,9 @@ function displayRouteLine(cyclingDirections, walkingDirections) {
         });
     }
 
-    if (!walkingDisplay) {
-        walkingDisplay = new google.maps.DirectionsRenderer();
-        walkingDisplay.setMap(map);
-        walkingDisplay.setOptions({
+    if (!walkingEndDisplay) {
+        walkingEndDisplay = new google.maps.DirectionsRenderer();
+        walkingEndDisplay.setOptions({
             polylineOptions: { strokeColor: "#75FF75", strokeWeight: 4, strokeOpacity: 0.8 },
 
             // We will draw our own markers.
@@ -315,8 +369,18 @@ function displayRouteLine(cyclingDirections, walkingDirections) {
         });
     }
 
+    if (useCityCycle) {
+        walkingStartDisplay.setMap(map);
+        walkingStartDisplay.setDirections(walkingStartDirections);
+    } else {
+        walkingStartDisplay.setMap(null);
+    }
+
+    cyclingDisplay.setMap(map);
+    walkingEndDisplay.setMap(map);
+
     cyclingDisplay.setDirections(cyclingDirections);
-    walkingDisplay.setDirections(walkingDirections);
+    walkingEndDisplay.setDirections(walkingEndDirections);
 }
 
 function placeRouteMarker(latLng, label, title, popupContent) {
