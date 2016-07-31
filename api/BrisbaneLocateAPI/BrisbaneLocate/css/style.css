@@ -39,14 +39,6 @@ a {
     z-index: 999;
 }
 
-#nav-logo {
-    position: absolute;
-    top: 10px;
-    left: 20px;
-    width: 40px;
-    height: 40px;
-}
-
 .nav-menu {
     position: absolute;
     top: 0;
@@ -113,6 +105,12 @@ a {
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../Media/bg.png");
     background-position: 580px 0px;
     background-size: 1000px 700px;
+}
+
+#logo {
+    display: block;
+    margin: auto;
+    width: 50%;
 }
 
 #home-body {
@@ -205,6 +203,7 @@ textarea:focus, input:focus {
     width: 100%;
     box-shadow: 0 4px 8px -3px rgba(0, 0, 0, 0.5);
     padding: 10px;
+    box-sizing: border-box;
 }
 
 #distance-time {
@@ -218,6 +217,7 @@ textarea:focus, input:focus {
 
 #step-details {
     padding: 10px;
+    box-sizing: border-box;
 }
 
 .step {

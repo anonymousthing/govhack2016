@@ -269,6 +269,16 @@ function calculateAndDisplayRoute() {
     }
 }
 
+function toShortTimeString(date) {
+    var hours = date.getHours();
+    var pm = hours >= 12;
+    var ampmString = pm ? "PM" : "AM";
+    if (hours > 12)
+        hours = hours - 12;
+
+    return hours + ":" + date.getMinutes() + " " + ampmString;
+}
+
 function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirections) {
     displayRouteLine(walkingStartDirections, cyclingDirections, walkingEndDirections);
 
@@ -345,8 +355,16 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
         dataType: "json",
         contentType: "application/json",
         method: "POST",
-    }).done(function(data) {
-        console.log(data);
+    }).done(function (data) {
+        console.log("Loaded " + data.length + " events");
+        for (var i = 0; i < data.length; i++) {
+            var event = data[i];
+            var popupData = {
+                title: event.Title,
+                description: event.Address + "<br />" + event.Description
+            };
+            placeMarker(event.Latitude, event.Longitude, popupData);
+        }
     }).error(function (data) {
         console.log(data);
     });
@@ -452,6 +470,12 @@ function placeRackMarker(latLng, title, popupContent) {
     markers.push(marker);
 }
 
+/*
+data {
+    title: '',
+    description: ''
+}
+*/
 function placeMarker(latitude, longitude, data) {
     var location = new google.maps.LatLng({ lat: latitude, lng: longitude });
     var marker = new google.maps.Marker({
@@ -459,11 +483,11 @@ function placeMarker(latitude, longitude, data) {
         position: location,
 
         // Tooltip
-        title: "Event",
+        title: data.title,
         label: ""
     });
     marker.addListener('click', function () {
-        showInfoWindow(map, marker, "<h3>Title</h3>Event details here");
+        showInfoWindow(map, marker, "<h3>" + data.title + "</h3>" + data.description);
     });
     markers.push(marker);
 }
