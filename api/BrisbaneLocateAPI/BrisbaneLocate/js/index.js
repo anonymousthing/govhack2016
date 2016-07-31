@@ -37,8 +37,8 @@ window.onload = function () {
         loadMap($('#from-text').val(), $('#destination-text').val(), onMapLoadSuccess, onMapLoadError);
     });
 
-    var height = $("#content-home").height();
-    $("#content-home").height(height);
+    var bottom = $("#content-home").offset().top + $("#content-home").outerHeight(true);
+    $("#bg-image").height(Math.max(window.innerHeight, bottom));
 };
 
 $(window).on('hashchange', function(e) {
