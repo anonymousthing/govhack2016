@@ -1,9 +1,10 @@
 var initialHash = true;
 
-var loadMap = function (from, destination, success, error) {
-    window.location.hash = "#map";
+var loadMap = function (success, error) {
     var isPrivateBike = $("#citycycle-checkbox").prop('checked');
-    beginPlan(from, destination, !isPrivateBike);
+    if (beginPlan(!isPrivateBike)) {
+        window.location.hash = "#map";
+    }
     
     var goButton = $("#go-button");
     goButton.removeClass('fa-spinner');
@@ -40,7 +41,7 @@ window.onload = function () {
         goButton.addClass('fa-spinner');
         goButton.addClass('fa-pulse');
 
-        loadMap($('#from-text').val(), $('#destination-text').val(), onMapLoadSuccess, onMapLoadError);
+        loadMap(onMapLoadSuccess, onMapLoadError);
     });
 
     resizeElements();

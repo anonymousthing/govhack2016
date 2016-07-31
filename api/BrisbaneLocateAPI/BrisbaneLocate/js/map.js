@@ -12,6 +12,10 @@ var markers = [];
 // The popup window that may be displayed on the map.
 var infoWindow;
 
+// The autocomplete-enabled search boxes
+var startAutocomplete;
+var endAutocomplete;
+
 // The list bike racks retrieved from the server.
 var bikeracks;
 var citycycles;
@@ -23,10 +27,6 @@ var useCityCycle;
 
 // Wether the map has been sized to the route yet.
 var mapSized;
-
-// The geocoded start and end locations.
-var startLatLng;
-var endLatLng;
 
 // The drop-off racks available.
 var availableDropOffPoints;
@@ -51,8 +51,8 @@ function initMap() {
     bikeLayer.setMap(map);
 
     // Set-up place autocomplete
-    setupPlaceAutocomplete($("#from-text")[0]);
-    setupPlaceAutocomplete($("#destination-text")[0]);
+    startAutocomplete = setupPlaceAutocomplete($("#from-text")[0]);
+    endAutocomplete = setupPlaceAutocomplete($("#destination-text")[0]);
 }
 
 function setupPlaceAutocomplete(textbox) {
@@ -63,6 +63,7 @@ function setupPlaceAutocomplete(textbox) {
     };
     var autocomplete = new google.maps.places.Autocomplete(textbox, autocompleteOptions);
     autocomplete.bindTo('bounds', map);
+    return autocomplete;
 }
 
 // The bounds that google should bias results towards. The Brisbane CDB. To be passed
@@ -135,71 +136,56 @@ function calculateDelta(rack, latLng) {
 }
 
 // Called whenever searches for a route from start -> end from the home screen.
-function beginPlan(start, end, cityCycle) {
-    startLocation = start;
-    endLocation = end;
+function beginPlan(cityCycle) {
+    var startPlace = startAutocomplete.getPlace();
+    var endPlace = endAutocomplete.getPlace();
+
+    if (!endPlace.geometry || !endPlace.geometry.location
+        || !startPlace.geometry || !startPlace.geometry.location) {
+        // User has not selected a place somewhere.
+        return false;
+    }
+
+    startLocation = { placeId: startPlace.place_id };
+    endLocation = { placeId: endPlace.place_id };
     useCityCycle = cityCycle;
     mapSized = false;
-    
-    // TODO: Change to Place search request.
-    // Geocode both the start and end locations, with bias towards Brisbane CBD.
-    var pendingResponses = 2;
-    var geocoder = new google.maps.Geocoder();
-    geocoder.geocode({
-        address: end
-    }, function (results, status) {
-        if (status == 'OK') {
-            endLatLng = results[0].geometry.location;
-            pendingResponses--;
-            processGeocode();
-        }
-    });
+        
+    var startLatLng = startPlace.geometry.location;
+    var endLatLng = endPlace.geometry.location;
 
-    geocoder.geocode({
-        address: start
-    }, function (results, status) {
-        if (status == 'OK') {
-            startLatLng = results[0].geometry.location;
-            pendingResponses--;
-            processGeocode();
-        }
-    });
-
-    function processGeocode() {
-        if (pendingResponses > 0) return;
-
-        if (useCityCycle) {
-            availablePickUpPoints = getNearbyBikeRacks(citycycles, startLatLng, endLatLng);
-            availableDropOffPoints = getNearbyBikeRacks(citycycles, endLatLng, startLatLng);
-        } else {
-            // Gets the nearest bike rack to the endpoint.
-            availablePickUpPoints = null;
-            availableDropOffPoints = getNearbyBikeRacks(bikeracks, endLatLng, startLatLng);
-        }
-
-        // Bail.
-        if (!availableDropOffPoints || availableDropOffPoints.length == 0 || !availableDropOffPoints[0].score) {
-            window.alert('No suitable bike racks/CityCycles could be find. Try another origin or destination in Brisbane.');
-            return;
-        }
-        if ((useCityCycle) && (!availablePickUpPoints || availablePickUpPoints.length == 0 || 
-            !availablePickUpPoints[0].score)) {
-            window.alert('No suitable CityCycles could be find. Try another origin or destination in Brisbane.');
-            return;
-        }
-
-        // When first searching, default to the nearest rack/CityCycle.
-        selectedDropOffPoint = availableDropOffPoints[0];
-
-        if (useCityCycle) {
-            selectedPickUpPoint = availablePickUpPoints[0];
-        } else {
-            selectedPickUpPoint = null;
-        }
-
-        // When first searching, default to the nearest rack.
-        calculateAndDisplayRoute();
+    if (useCityCycle) {
+        availablePickUpPoints = getNearbyBikeRacks(citycycles, startLatLng, endLatLng);
+        availableDropOffPoints = getNearbyBikeRacks(citycycles, endLatLng, startLatLng);
+    } else {
+        // Gets the nearest bike rack to the endpoint.
+        availablePickUpPoints = null;
+        availableDropOffPoints = getNearbyBikeRacks(bikeracks, endLatLng, startLatLng);
     }
+
+    // Bail.
+    if (!availableDropOffPoints || availableDropOffPoints.length == 0 || !availableDropOffPoints[0].score) {
+        window.alert('No suitable bike racks/CityCycles could be find. Try another origin or destination in Brisbane.');
+        return;
+    }
+    if ((useCityCycle) && (!availablePickUpPoints || availablePickUpPoints.length == 0 ||
+        !availablePickUpPoints[0].score)) {
+        window.alert('No suitable CityCycles could be find. Try another origin or destination in Brisbane.');
+        return;
+    }
+
+    // When first searching, default to the nearest rack/CityCycle.
+    selectedDropOffPoint = availableDropOffPoints[0];
+
+    if (useCityCycle) {
+        selectedPickUpPoint = availablePickUpPoints[0];
+    } else {
+        selectedPickUpPoint = null;
+    }
+
+    // When first searching, default to the nearest rack.
+    calculateAndDisplayRoute();
+    return true;
 }
 
 // Called when the user changes their drop-off point manually
