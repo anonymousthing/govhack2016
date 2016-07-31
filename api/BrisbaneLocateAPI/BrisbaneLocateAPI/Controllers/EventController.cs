@@ -17,7 +17,7 @@ namespace BrisbaneLocateAPI.Controllers
         [HttpGet]
         public List<TrumbaEvent> Get()
         {
-            return new FitnessEventService().GetFitnessEvents();
+            return new FitnessEventService().GetEvents();
         }
 
         [HttpPost]
@@ -25,12 +25,22 @@ namespace BrisbaneLocateAPI.Controllers
         {
             var events = new List<TrumbaEvent>();
 
+            events.AddRange(new FitnessEventService().GetEvents());
+            events.AddRange(new KidsEventService().GetEvents());
+            events.AddRange(new CouncilEventService().GetEvents());
+            events.AddRange(new ActiveParksService().GetEvents());
+            events.AddRange(new FitnessEventService().GetEvents());
+
+            events = events.Distinct().ToList();
+
+            events = TrumbaService.ComputeGeocodes(events);
+
             foreach (var location in locations)
             {
-                events.AddRange(TrumbaService.FilterEventsByDistanceAndDate((double)location.Latitude, (double)location.Longitude, DateTime.Now, new FitnessEventService().GetFitnessEvents(), 2));
+                events = TrumbaService.FilterEventsByDistanceAndDate((double)location.Latitude, (double)location.Longitude, DateTime.Now, events, 2);
             }
 
-            return events.Distinct().ToList();
+            return events;
         }
     }    
 }

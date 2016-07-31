@@ -20,12 +20,11 @@ namespace RSSFeeds.Services
         static public List<TrumbaEvent> FitnessEvents { get; private set; }
         static private DateTime LastUpdated { get; set; }
         
-        public List<TrumbaEvent> GetFitnessEvents()
+        public List<TrumbaEvent> GetEvents()
         {
             if (FitnessEvents == null || DateTime.Now.Subtract(LastUpdated).TotalDays > 1)
             {
                 FitnessEvents = TrumbaService.GetEvents("http://www.trumba.com/calendars/type.rss?filterview=Fitness&mixin=688783%2c681701%2c782935%2c812762");
-                FitnessEvents = TrumbaService.ComputeGeocodes(FitnessEvents);
                 LastUpdated = DateTime.Now;
             }
 
@@ -38,12 +37,11 @@ namespace RSSFeeds.Services
         static public List<TrumbaEvent> KidsEvents { get; private set; }
         static private DateTime LastUpdated { get; set; }
 
-        public List<TrumbaEvent> GetKidsEvents()
+        public List<TrumbaEvent> GetEvents()
         {
             if (KidsEvents == null || DateTime.Now.Subtract(LastUpdated).TotalDays > 1)
             {
                 KidsEvents = TrumbaService.GetEvents("http://www.trumba.com/calendars/brisbane-kids.rss?filterview=kids_6_12");
-                KidsEvents = TrumbaService.ComputeGeocodes(KidsEvents);
                 LastUpdated = DateTime.Now;
             }
 
@@ -56,12 +54,11 @@ namespace RSSFeeds.Services
         static public List<TrumbaEvent> CouncilEvents { get; private set; }
         static private DateTime LastUpdated { get; set; }
 
-        public List<TrumbaEvent> GetCouncilEvents()
+        public List<TrumbaEvent> GetEvents()
         {
             if (CouncilEvents == null || DateTime.Now.Subtract(LastUpdated).TotalDays > 1)
             {
                 CouncilEvents = TrumbaService.GetEvents("http://www.trumba.com/calendars/brisbane-city-council.rss");
-                CouncilEvents = TrumbaService.ComputeGeocodes(CouncilEvents);
                 LastUpdated = DateTime.Now;
             }
 
@@ -74,12 +71,11 @@ namespace RSSFeeds.Services
         static public List<TrumbaEvent> ActiveParks { get; private set; }
         static private DateTime LastUpdated { get; set; }
 
-        public List<TrumbaEvent> GetActiveParksEvents()
+        public List<TrumbaEvent> GetEvents()
         {
             if (ActiveParks == null || DateTime.Now.Subtract(LastUpdated).TotalDays > 1)
             {
                 ActiveParks = TrumbaService.GetEvents("http://www.trumba.com/calendars/active-parks.rss");
-                ActiveParks = TrumbaService.ComputeGeocodes(ActiveParks);
                 LastUpdated = DateTime.Now;
             }
 
