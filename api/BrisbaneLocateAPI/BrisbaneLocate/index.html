@@ -18,8 +18,10 @@
 	<body>
         <div class="content">
             <div class="content-body current" style="display: block" id="content-home">
+                <div id="bg-image"></div>
                 <div id="home-body">
                     <div id="content-title">
+                        <img id="logo" src="Media/logo.png"></img>
                         <h2>WHERE DO YOU WANT TO GO TODAY?</h2>
                     </div>
                     <div id="search-boxes">
@@ -28,6 +30,9 @@
                         </div>
                         <div id="destination-wrapper">
                             <input class="textbox" id="destination-text" type="text" placeholder="Destination" />
+                        </div>
+                        <div class="checkbox-wrapper">
+                            <label><input type="checkbox" id="citycycle-checkbox">I'm using my own bike</label> 
                         </div>
                     </div>
                     <div id="go-button-wrapper">
@@ -43,8 +48,8 @@
                             <h3>Route details</h3>
                         </div>
                         <div id="distance-time">
-                            <b>Distance: </b><div id="distance-details">5 km</div><br />
-                            <b>Time: </b><div id="time-details">20 mins</div>
+                            <b>Distance: </b><div id="distance-details"></div><br />
+                            <b>Time: </b><div id="time-details"></div>
                         </div>
                     </div>
                     <div id="step-details">

@@ -39,14 +39,6 @@ a {
     z-index: 999;
 }
 
-#nav-logo {
-    position: absolute;
-    top: 10px;
-    left: 20px;
-    width: 40px;
-    height: 40px;
-}
-
 .nav-menu {
     position: absolute;
     top: 0;
@@ -98,27 +90,40 @@ a {
 
 #content-home {
     width: 100%;
-    height: 100%;
+
+    text-align: center;
+    padding-bottom: 40px;
+}
+
+#bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: visible;
+
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../Media/bg.png");
     background-position: 580px 0px;
     background-size: 1000px 700px;
+}
 
-    text-align: center;
-    padding: 0;
+#logo {
+    display: block;
+    margin: auto;
+    width: 50%;
 }
 
 #home-body {
-    position: absolute;
-    top: 60px;
+    position: relative;
+    margin-top: 60px;
     width: 100%;
-    bottom: 0;
     z-index: 5;
 }
 
 #content-title {
     width: 100%;
     margin-top: 40px;
-    margin-bottom: 80px;
+    margin-bottom: 60px;
     text-align: center;
     color: white;
     font-weight: bold;
@@ -126,7 +131,7 @@ a {
     box-sizing: border-box;
 }
 
-textarea:focus, input:focus{
+textarea:focus, input:focus {
     outline: none;
 }
 
@@ -134,7 +139,8 @@ textarea:focus, input:focus{
     border-radius: 5px;
     line-height: 50px;
     height: 50px;
-    width: 200px;
+    width: 65%;
+    max-width: 400px;
 
     border: 0px solid;
 
@@ -157,6 +163,17 @@ textarea:focus, input:focus{
     margin-bottom: 50px;
 }
 
+.checkbox-wrapper {
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    font-size: 18px;
+}
+
+#citycycle-checkbox {
+    width: 15px;
+    height: 15px;
+}
+
 #go-button-wrapper {
     margin: auto;
 
@@ -174,7 +191,7 @@ textarea:focus, input:focus{
 
 #map {
     width: 100%;
-    height: 600px;
+    height: 70%;
 }
 
 #map-details {
@@ -185,11 +202,14 @@ textarea:focus, input:focus{
 #details-top {
     width: 100%;
     box-shadow: 0 4px 8px -3px rgba(0, 0, 0, 0.5);
+}
+#details-title {
     padding: 10px;
+    box-sizing: border-box;
 }
 
 #distance-time {
-    margin-top: 20px;
+    padding: 10px;
     margin-bottom: 5px;
 }
 
@@ -199,10 +219,12 @@ textarea:focus, input:focus{
 
 #step-details {
     padding: 10px;
+    box-sizing: border-box;
 }
 
 .step {
     padding: 10px 0;
+    min-height: 40px;
 }
 
 .step-description {
@@ -217,6 +239,8 @@ textarea:focus, input:focus{
     display: inline-block;
     vertical-align: middle;
     margin-right: 10px;
+    float: left;
+    background-image: url("../Media/straight.png");
 }
 
 .sharp-left, .turn-left {
@@ -227,11 +251,11 @@ textarea:focus, input:focus{
     background-image: url("../Media/sharp-right.png");
 }
 
-.slight-left {
+.slight-left, .keep-left {
     background-image: url("../Media/slight-left.png").
 }
 
-.slight-right {
+.slight-right, .keep-right {
     background-image: url("../Media/slight-right.png");
 }
 
@@ -239,3 +263,10 @@ textarea:focus, input:focus{
     background-image: url("../Media/turn-around.png");
 }
 
+.straight {
+    background-image: url("../Media/straight.png");
+}
+
+.rack {
+    background-image: url("../Media/rack.png");
+}

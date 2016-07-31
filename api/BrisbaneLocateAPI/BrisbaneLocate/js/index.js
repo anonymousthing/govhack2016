@@ -1,9 +1,11 @@
 var initialHash = true;
 
-var loadMap = function (from, destination, success, error) {
-    window.location.hash = "#map";
-    beginPlan(from, destination);
-
+var loadMap = function (success, error) {
+    var isPrivateBike = $("#citycycle-checkbox").prop('checked');
+    if (beginPlan(!isPrivateBike)) {
+        window.location.hash = "#map";
+    }
+    
     var goButton = $("#go-button");
     goButton.removeClass('fa-spinner');
     goButton.removeClass('fa-pulse');
@@ -15,6 +17,12 @@ var onMapLoadSuccess = function(data) {
 
 var onMapLoadError = function(data) {
     alert(data.message);
+};
+
+var resizeElements = function () {
+    var bottom = $("#content-home").offset().top + $("#content-home").outerHeight(true);
+    $("#bg-image").height(Math.max(window.innerHeight, bottom));
+    $("#map").height(window.innerHeight * 0.7);
 };
 
 window.onload = function () {
@@ -33,12 +41,15 @@ window.onload = function () {
         goButton.addClass('fa-spinner');
         goButton.addClass('fa-pulse');
 
-        loadMap($('#from-text').val(), $('#destination-text').val(), onMapLoadSuccess, onMapLoadError);
+        loadMap(onMapLoadSuccess, onMapLoadError);
     });
 
-    var height = $("#content-home").height();
-    $("#content-home").height(height);
+    resizeElements();
 };
+
+$(window).on('resize', function (e) {
+    resizeElements();
+});
 
 $(window).on('hashchange', function(e) {
     e.preventDefault();
