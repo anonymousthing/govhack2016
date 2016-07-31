@@ -140,8 +140,8 @@ function beginPlan(cityCycle) {
     var startPlace = startAutocomplete.getPlace();
     var endPlace = endAutocomplete.getPlace();
 
-    if (!endPlace.geometry || !endPlace.geometry.location
-        || !startPlace.geometry || !startPlace.geometry.location) {
+    if (!endPlace || !endPlace.geometry || !endPlace.geometry.location
+        || !startPlace || !startPlace.geometry || !startPlace.geometry.location) {
         // User has not selected a place somewhere.
         return false;
     }
@@ -300,7 +300,7 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
         var location = new google.maps.LatLng({ lat: dropOffPoint.Latitude, lng: dropOffPoint.Longitude });
         
         if (dropOffPoint === selectedDropOffPoint) {
-            placeRackMarker(location, facilityName, '<h3>' + dropOffTitle + '</h3>' + dropOffPoint.Address);
+            placeRouteMarker(location, "R", facilityName, '<h3>' + dropOffTitle + '</h3>' + dropOffPoint.Address);
         } else {
             placeRackMarker(location, facilityName, '<h3>Alternative ' + facilityName + '</h3>' + dropOffPoint.Address
                 + '<div><a href="javascript:void(0);" onclick="changeDropOffPoint(' + i + ');">Use this ' + facilityName + '</a></div>');
@@ -313,7 +313,7 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
             var location = new google.maps.LatLng({ lat: pickUpPoint.Latitude, lng: pickUpPoint.Longitude });
 
             if (pickUpPoint === selectedPickUpPoint) {
-                placeRackMarker(location, facilityName, '<h3>Pick-up your CityCycle here</h3>' + pickUpPoint.Address);
+                placeRouteMarker(location, "P", facilityName, '<h3>Pick-up your CityCycle here</h3>' + pickUpPoint.Address);
             } else {
                 placeRackMarker(location, facilityName, '<h3>Alternative ' + facilityName + '</h3>' + pickUpPoint.Address
                     + '<div><a href="javascript:void(0);" onclick="changePickUpPoint(' + i + ');">Use this ' + facilityName + '</a></div>');
