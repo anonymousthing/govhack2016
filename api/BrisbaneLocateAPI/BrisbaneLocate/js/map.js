@@ -139,7 +139,6 @@ function beginPlan(start, end, cityCycle) {
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({
         address: end,
-        componentRestrictions: getComponentRestrictions()
     }, function (results, status) {
         if (status == 'OK') {
             endLatLng = results[0].geometry.location;
@@ -150,7 +149,6 @@ function beginPlan(start, end, cityCycle) {
 
     geocoder.geocode({
         address: start,
-        componentRestrictions: getComponentRestrictions()
     }, function (results, status) {
         if (status == 'OK') {
             startLatLng = results[0].geometry.location;
@@ -280,7 +278,7 @@ function calculateAndDisplayRoute() {
 function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirections) {
     displayRouteLine(walkingStartDirections, cyclingDirections, walkingEndDirections);
 
-    var walkingStartLeg = walkingStartDirections.routes[0].legs[0];
+    var walkingStartLeg = (useCityCycle) ? walkingStartDirections.routes[0].legs[0] : null;
     var cycleLeg = cyclingDirections.routes[0].legs[0];
     var walkingEndLeg = walkingEndDirections.routes[0].legs[0];
 
