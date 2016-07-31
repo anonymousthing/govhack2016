@@ -129,10 +129,10 @@ function calculateDelta(rack, latLng) {
 }
 
 // Called whenever searches for a route from start -> end from the home screen.
-function beginPlan(start, end) {
+function beginPlan(start, end, cityCycle) {
     startLocation = start;
     endLocation = end;
-    useCityCycle = false;
+    useCityCycle = cityCycle;
     
     // Geocode both the start and end locations, with bias towards Brisbane CBD.
     var pendingResponses = 2;
@@ -199,6 +199,14 @@ function beginPlan(start, end) {
 // Called when the user changes their drop-off point manually
 function changeDropOffPoint(index) {
     selectedDropOffPoint = availableDropOffPoints[index];
+
+    // Update the displayed route
+    calculateAndDisplayRoute();
+}
+
+// Called when the user changes their drop-off point manually
+function changePickUpPoint(index) {
+    selectedPickUpPoint = availablePickUpPoints[index];
 
     // Update the displayed route
     calculateAndDisplayRoute();
@@ -272,44 +280,65 @@ function calculateAndDisplayRoute() {
 function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirections) {
     displayRouteLine(walkingStartDirections, cyclingDirections, walkingEndDirections);
 
-    var firstLeg = cyclingDirections.routes[0].legs[0];
-    var secondLeg = walkingEndDirections.routes[0].legs[0];
+    var walkingStartLeg = walkingStartDirections.routes[0].legs[0];
+    var cycleLeg = cyclingDirections.routes[0].legs[0];
+    var walkingEndLeg = walkingEndDirections.routes[0].legs[0];
 
     // Display route markers
     clearMarkers();
+
+    var firstLeg = (useCityCycle) ? walkingStartLeg : cycleLeg;
     placeRouteMarker(firstLeg.start_location, "A", "Start", '<h3>Start</h3>' + firstLeg.start_address);
 
+    var facilityName = (useCityCycle) ? "CityCycle Station" : "bicycle rack";
+    var dropOffTitle = (useCityCycle) ? "Return your CityCycle here" : "Park your bicycle here";
+    
     for (var i = 0; i < availableDropOffPoints.length; i++) {
         var dropOffPoint = availableDropOffPoints[i];
         var location = new google.maps.LatLng({ lat: dropOffPoint.Latitude, lng: dropOffPoint.Longitude });
         
         if (dropOffPoint === selectedDropOffPoint) {
-            placeRouteMarker(location, "P", "Bike Rack", '<h3>Park your bicycle here</h3>' + dropOffPoint.Address);
+            placeRouteMarker(location, "P", facilityName, '<h3>' + dropOffTitle + '</h3>' + dropOffPoint.Address);
         } else {
-            placeRouteMarker(location, " ", "Bike Rack", '<h3>Alternative bicycle rack</h3>' + dropOffPoint.Address
-                + '<div><a href="javascript:void(0);" onclick="changeDropOffPoint(' + i + ');">Route through here</a></div>');
+            placeRouteMarker(location, " ", facilityName, '<h3>Alternative ' + facilityName + '</h3>' + dropOffPoint.Address
+                + '<div><a href="javascript:void(0);" onclick="changeDropOffPoint(' + i + ');">Use this ' + facilityName + '</a></div>');
         }
     }
 
-    placeRouteMarker(secondLeg.end_location, "B", "End", '<h3>End</h3>' + secondLeg.end_address);
+    if (useCityCycle) {
+        for (var i = 0; i < availablePickUpPoints.length; i++) {
+            var pickUpPoint = availablePickUpPoints[i];
+            var location = new google.maps.LatLng({ lat: pickUpPoint.Latitude, lng: pickUpPoint.Longitude });
 
-    var cyclingBounds = cyclingDirections.routes[0].bounds;
-    var displayBounds = new google.maps.LatLngBounds(cyclingBounds.getSouthWest(), cyclingBounds.getNorthEast());
-    displayBounds.union(walkingEndDirections.routes[0].bounds);
+            if (pickUpPoint === selectedPickUpPoint) {
+                placeRouteMarker(location, "P", facilityName, '<h3>Pick-up your CityCycle here</h3>' + pickUpPoint.Address);
+            } else {
+                placeRouteMarker(location, " ", facilityName, '<h3>Alternative ' + facilityName + '</h3>' + pickUpPoint.Address
+                    + '<div><a href="javascript:void(0);" onclick="changePickUpPoint(' + i + ');">Use this ' + facilityName + '</a></div>');
+            }
+        }
+    }
+
+    placeRouteMarker(walkingEndLeg.end_location, "B", "End", '<h3>End</h3>' + walkingEndLeg.end_address);
+
+    var displayBounds = new google.maps.LatLngBounds();
+    if (useCityCycle) displayBounds = displayBounds.union(walkingStartDirections.routes[0].bounds);
+    displayBounds = displayBounds.union(cyclingDirections.routes[0].bounds);
+    displayBounds = displayBounds.union(walkingEndDirections.routes[0].bounds);
     map.fitBounds(displayBounds);
 
     // TODO: Place event markers
     placeMarker(-27.469, 153.023, {});
 
-    var latlngs = [];
-
     // Update step details
     $("#step-details").html('');
-    for (var i = 0; i < firstLeg.steps.length; i++) {
-        var step = firstLeg.steps[i];
-        latlngs.push({ latitude: step.start_location.lat(), longitude: step.start_location.lng() });
-        $("#step-details").append('<div class="step"><div class="maneuver ' + step.maneuver + '"></div><div class="step-description">' + step.instructions + '</div></div>');
+    if (useCityCycle) {
+        displaySteps(walkingStartLeg);
+        $("#step-details").append('<div class="step"><div class="maneuver"></div><div class="step-description">Pick-up your CityCycle from <b>' + selectedDropOffPoint.Address + '</b></div></div>');
     }
+
+    var latlngs = displaySteps(cycleLeg);
+
     $.ajax("/api/event", {
         data: JSON.stringify(latlngs),
         dataType: "json",
@@ -321,11 +350,18 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
         console.log(data);
     });
 
-    $("#step-details").append('<div class="step"><div class="maneuver"></div><div class="step-description">Park at the bicycle racks on <b>' + selectedDropOffPoint.Address + '</b></div></div>');
-    for (var i = 0; i < secondLeg.steps.length; i++) {
-        var step = secondLeg.steps[i];
+    $("#step-details").append('<div class="step"><div class="maneuver"></div><div class="step-description">Park at the ' + facilityName + ' on <b>' + selectedDropOffPoint.Address + '</b></div></div>');
+    displaySteps(walkingEndLeg);
+}
+
+function displaySteps(leg) {
+    var latlngs = [];
+    for (var i = 0; i < leg.steps.length; i++) {
+        var step = leg.steps[i];
+        latlngs.push({ latitude: step.start_location.lat(), longitude: step.start_location.lng() });
         $("#step-details").append('<div class="step"><div class="maneuver ' + step.maneuver + '"></div><div class="step-description">' + step.instructions + '</div></div>');
     }
+    return latlngs;
 }
 
 function displayRouteLine(walkingStartDirections, cyclingDirections, walkingEndDirections) {
