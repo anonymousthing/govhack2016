@@ -178,7 +178,64 @@ textarea:focus, input:focus{
 }
 
 #map-details {
-    background-color: rgba(0, 0, 0, 0.5);
-    height: 600px;
+    font-family: 'Open Sans', sans-serif;
     width: 100%;
 }
+
+#details-top {
+    width: 100%;
+    box-shadow: 0 4px 8px -3px rgba(0, 0, 0, 0.5);
+    padding: 10px;
+}
+
+#distance-time {
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+#distance-details, #time-details {
+    display: inline-block;
+}
+
+#step-details {
+    padding: 10px;
+}
+
+.step {
+    padding: 10px 0;
+}
+
+.step-description {
+    width: calc(100% - 50px);
+    display: inline-block;
+}
+
+.maneuver {
+    width: 40px;
+    height: 40px;
+    background-size: contain;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.sharp-left, .turn-left {
+    background-image: url("../Media/sharp-left.png");
+}
+
+.sharp-right, .turn-right {
+    background-image: url("../Media/sharp-right.png");
+}
+
+.slight-left {
+    background-image: url("../Media/slight-left.png").
+}
+
+.slight-right {
+    background-image: url("../Media/slight-right.png");
+}
+
+.turn-around {
+    background-image: url("../Media/turn-around.png");
+}
+

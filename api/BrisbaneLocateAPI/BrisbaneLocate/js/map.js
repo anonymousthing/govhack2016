@@ -183,7 +183,7 @@ function displayRoute(cyclingDirections, walkingDirections, rack) {
     for (var i = 0; i < firstLeg.steps.length; i++) {
         var step = firstLeg.steps[i];
         latlngs.push({ latitude: step.start_location.lat(), longitude: step.start_location.lng() });
-        $("#step-details").append('<div class="step">' + step.instructions + '</div>');
+        $("#step-details").append('<div class="step"><div class="maneuver ' + step.maneuver + '"></div><div class="step-description">' + step.instructions + '</div></div>');
     }
     $.ajax("/api/event", {
         data: JSON.stringify(latlngs),
@@ -196,10 +196,10 @@ function displayRoute(cyclingDirections, walkingDirections, rack) {
         console.log(data);
     });
 
-    $("#step-details").append('<div class="step">Park at the bicycle racks on <b>' + rack.Address + '</b></div>');
+    $("#step-details").append('<div class="step"><div class="maneuver"></div><div class="step-description">Park at the bicycle racks on <b>' + rack.Address + '</b></div></div>');
     for (var i = 0; i < secondLeg.steps.length; i++) {
         var step = secondLeg.steps[i];
-        $("#step-details").append('<div class="step">' + step.instructions + '</div>');
+        $("#step-details").append('<div class="step"><div class="maneuver ' + step.maneuver + '"></div><div class="step-description">' + step.instructions + '</div></div>');
     }
 }
 
