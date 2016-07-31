@@ -302,6 +302,8 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
     placeMarker(-27.469, 153.023, {});
 
     var latlngs = [];
+    var totalDistance = (firstLeg.distance.value + secondLeg.distance.value) / 1000;
+    var totalTime = (firstLeg.duration.value + secondLeg.duration.value) / 60;
 
     // Update step details
     $("#step-details").html('');
@@ -326,6 +328,9 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
         var step = secondLeg.steps[i];
         $("#step-details").append('<div class="step"><div class="maneuver ' + step.maneuver + '"></div><div class="step-description">' + step.instructions + '</div></div>');
     }
+
+    $("#distance-details").html((Math.round(totalDistance * 10) / 10) + ' km');
+    $("#time-details").html(Math.round(totalTime) + ' mins');
 }
 
 function displayRouteLine(walkingStartDirections, cyclingDirections, walkingEndDirections) {
