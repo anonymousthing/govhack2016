@@ -332,9 +332,6 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
         mapSized = true;
     }
 
-    // TODO: Place event markers
-    placeMarker(-27.469, 153.023, {});
-
     var latlngs = [];
     var totalDistance = ((useCityCycle ? walkingStartLeg.distance.value : 0) + cycleLeg.distance.value + walkingEndLeg.distance.value) / 1000;
     var totalTime = ((useCityCycle ? walkingStartLeg.duration .value : 0) + cycleLeg.duration.value + walkingEndLeg.duration.value) / 60;
