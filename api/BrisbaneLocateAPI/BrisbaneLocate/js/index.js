@@ -2,8 +2,9 @@ var initialHash = true;
 
 var loadMap = function (from, destination, success, error) {
     window.location.hash = "#map";
-    beginPlan(from, destination);
-
+    var isPrivateBike = $("#citycycle-checkbox").prop('checked');
+    beginPlan(from, destination, !isPrivateBike);
+    
     var goButton = $("#go-button");
     goButton.removeClass('fa-spinner');
     goButton.removeClass('fa-pulse');

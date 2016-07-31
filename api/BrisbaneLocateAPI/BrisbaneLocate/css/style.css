@@ -157,6 +157,17 @@ textarea:focus, input:focus{
     margin-bottom: 50px;
 }
 
+.checkbox-wrapper {
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    font-size: 18px;
+}
+
+#citycycle-checkbox {
+    width: 15px;
+    height: 15px;
+}
+
 #go-button-wrapper {
     margin: auto;
 
@@ -174,7 +185,7 @@ textarea:focus, input:focus{
 
 #map {
     width: 100%;
-    height: 600px;
+    height: 70%;
 }
 
 #map-details {
@@ -217,6 +228,8 @@ textarea:focus, input:focus{
     display: inline-block;
     vertical-align: middle;
     margin-right: 10px;
+
+    background-image: url("../Media/straight.png");
 }
 
 .sharp-left, .turn-left {
@@ -227,11 +240,11 @@ textarea:focus, input:focus{
     background-image: url("../Media/sharp-right.png");
 }
 
-.slight-left {
+.slight-left, .keep-left {
     background-image: url("../Media/slight-left.png").
 }
 
-.slight-right {
+.slight-right, .keep-right {
     background-image: url("../Media/slight-right.png");
 }
 
@@ -239,3 +252,6 @@ textarea:focus, input:focus{
     background-image: url("../Media/turn-around.png");
 }
 
+.straight {
+    background-image: url("../Media/straight.png");
+}
