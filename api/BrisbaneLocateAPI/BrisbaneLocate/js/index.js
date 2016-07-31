@@ -39,6 +39,7 @@ window.onload = function () {
 
     var bottom = $("#content-home").offset().top + $("#content-home").outerHeight(true);
     $("#bg-image").height(Math.max(window.innerHeight, bottom));
+    $("#map").height(window.innerHeight * 0.7);
 };
 
 $(window).on('hashchange', function(e) {

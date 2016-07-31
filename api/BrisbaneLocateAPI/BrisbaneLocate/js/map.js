@@ -336,7 +336,7 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
     $("#step-details").html('');
     if (useCityCycle) {
         displaySteps(walkingStartLeg);
-        $("#step-details").append('<div class="step"><div class="maneuver"></div><div class="step-description">Pick-up your CityCycle from <b>' + selectedDropOffPoint.Address + '</b></div></div>');
+        $("#step-details").append('<div class="step"><div class="maneuver rack"></div><div class="step-description">Pick-up your CityCycle from <b>' + selectedDropOffPoint.Address + '</b></div></div>');
     }
 
     var latlngs = displaySteps(cycleLeg);
@@ -354,7 +354,7 @@ function displayRoute(walkingStartDirections, cyclingDirections, walkingEndDirec
         console.log(data);
     });
 
-    $("#step-details").append('<div class="step"><div class="maneuver"></div><div class="step-description">Park at the ' + facilityName + ' on <b>' + selectedDropOffPoint.Address + '</b></div></div>');
+    $("#step-details").append('<div class="step"><div class="maneuver rack"></div><div class="step-description">Park at the ' + facilityName + ' on <b>' + selectedDropOffPoint.Address + '</b></div></div>');
     displaySteps(walkingEndLeg);
 }
 

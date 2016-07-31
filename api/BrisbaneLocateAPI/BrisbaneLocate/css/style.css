@@ -262,3 +262,7 @@ textarea:focus, input:focus{
 .straight {
     background-image: url("../Media/straight.png");
 }
+
+.rack {
+    background-image: url("../Media/rack.png");
+}

@@ -96,10 +96,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Media\bg.png" />
+    <Content Include="Media\rack.png" />
     <Content Include="Media\sharp-left.png" />
     <Content Include="Media\sharp-right.png" />
     <Content Include="Media\slight-left.png" />
     <Content Include="Media\slight-right.png" />
+    <Content Include="Media\straight.png" />
     <Content Include="Media\turn-around.png" />
     <Content Include="Media\turn-left.png" />
     <Content Include="Media\turn-right.png" />
