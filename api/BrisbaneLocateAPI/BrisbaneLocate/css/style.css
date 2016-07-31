@@ -123,7 +123,7 @@ a {
 #content-title {
     width: 100%;
     margin-top: 40px;
-    margin-bottom: 80px;
+    margin-bottom: 60px;
     text-align: center;
     color: white;
     font-weight: bold;
@@ -202,12 +202,14 @@ textarea:focus, input:focus {
 #details-top {
     width: 100%;
     box-shadow: 0 4px 8px -3px rgba(0, 0, 0, 0.5);
+}
+#details-title {
     padding: 10px;
     box-sizing: border-box;
 }
 
 #distance-time {
-    margin-top: 20px;
+    padding: 10px;
     margin-bottom: 5px;
 }
 
@@ -222,6 +224,7 @@ textarea:focus, input:focus {
 
 .step {
     padding: 10px 0;
+    min-height: 40px;
 }
 
 .step-description {
@@ -236,7 +239,7 @@ textarea:focus, input:focus {
     display: inline-block;
     vertical-align: middle;
     margin-right: 10px;
-
+    float: left;
     background-image: url("../Media/straight.png");
 }
 
